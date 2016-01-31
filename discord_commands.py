@@ -6,7 +6,7 @@ import random
 import requests
 import json
 import re
-from datetime import date
+from datetime import datetime
 
 # BUTTS CONSTANTS
 BUTT_REPLACE_DELIMITER = '$'
@@ -122,18 +122,19 @@ def code_wrap(msg):
     return "```" + msg + "```"
 
 
-def get_nba_scores(relative_date='today'):
+def get_nba_scores(args=None):
     """
         Scrapes ESPN.com for NBA scores and prints out all scores for the day
+        @param: args, dictionary returned by parse_command in discord_functions
+
+        Required arguments: None
+        Supported options:
+            $date=value (value must follow %m/%d/%Y format)
 
         @return: msg, the printout of all of the scores
     """
 
-    if relative_date == 'today':
-        date_obj = date.today()
-
-    date_string = __generate_date_string(
-        date_obj.year, date_obj.month, date_obj.day)
+    date_string = __parse_date_option(args)
 
     data = __extract_espn_json_scoreboard_data(
         "{}date/{}".format(ESPN_NBA_BASE_URL, date_string))
@@ -159,21 +160,23 @@ def get_nba_scores(relative_date='today'):
     return msg
 
 
-def get_ncaam_scores(relative_date='today'):
+def get_ncaam_scores(args=None):
     """
         Scrapes ESPN.com for NCAAM scores and prints out all scores for the day
+
+        @param: args, dictionary returned by parse_command in discord_functions
+
+        Required arguments: None
+        Supported options:
+            $date=value (value must follow %m/%d/%Y format)
 
         @return: msg, the printout of all of the scores
     """
 
-    if relative_date == 'today':
-        date_obj = date.today()
-
-    date_string = __generate_date_string(
-        date_obj.year, date_obj.month, date_obj.day)
+    date_string = __parse_date_option(args)
 
     data = __extract_espn_json_scoreboard_data(
-        "{}group/50/date/{}".format(ESPN_NCAAM_BASE_URL, date_string))
+        "{}date/{}".format(ESPN_NCAAM_BASE_URL, date_string))
     scores = __create_scores_dict(data)
 
     msg = ""
@@ -194,16 +197,6 @@ def get_ncaam_scores(relative_date='today'):
                     team_two['score'],
                     score['status']['description'])
     return msg
-
-
-def __generate_date_string(year, month, day):
-    """
-        Generates date string to be used in ESPN Url's
-        @param: date
-    """
-    date_obj = date(year, month, day)
-
-    return "{}{}{}".format(date_obj.year, date_obj.month, date_obj.day)
 
 
 def __extract_espn_json_scoreboard_data(url):
@@ -264,3 +257,21 @@ def __create_scores_dict(json_data):
             )
 
     return scores
+
+def __parse_date_option(args=None):
+    """
+        Parses the date option and returns the date_string to be used by
+        ESPN urls
+
+        @param: args, dictionary of arguments and options
+
+        @return: date_string, string date in %Y%m%d format
+    """
+    if args and 'date' in args['opts']:
+        date_obj = datetime.strptime(args['opts']['date'], "%m/%d/%Y")
+        date_string = date_obj.strftime("%Y%m%d")
+    else:
+        date_obj = datetime.now()
+        date_string = date_obj.strftime("%Y%m%d")
+
+    return date_string
