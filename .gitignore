@@ -1,0 +1,5 @@
+# Remote sync file for Atom
+.remote-sync.json
+
+# Json file of ESPN scoreboardData
+temp.json
