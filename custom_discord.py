@@ -8,7 +8,7 @@ import discord
 import asyncio
 import user
 import os
-from discord_functions import strip_command_string
+from discord_functions import strip_command_string, parse_command
 from discord_commands import get_corner_text, replace_with_butts, code_wrap,\
     get_nba_scores, get_ncaam_scores
 
@@ -63,13 +63,15 @@ def on_message(message):
         yield from client.send_message(message.channel, code_str)
 
     elif msg.startswith('!nba'):
-        _ = strip_command_string('nba', msg)
-        new_msg = code_wrap(get_nba_scores())
+        args = strip_command_string('!nba', msg)
+        opts_args = parse_command(args)
+        new_msg = code_wrap(get_nba_scores(opts_args))
         yield from client.send_message(message.channel, new_msg)
 
     elif msg.startswith('!ncaam'):
-        _ = strip_command_string('ncaam', msg)
-        new_msg = code_wrap(get_ncaam_scores())
+        args = strip_command_string('!ncaam', msg)
+        opts_args = parse_command(args)
+        new_msg = code_wrap(get_ncaam_scores(opts_args))
         yield from client.send_message(message.channel, new_msg)
 
 client.run(user.email, user.password)
