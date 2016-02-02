@@ -72,6 +72,7 @@ def replace_with_butts(msg):
     if replace_str:
         index_of_delimiter = msg.find(BUTT_REPLACE_DELIMITER) - 1
         new_msg = msg[:index_of_delimiter]
+
         return new_msg.replace(replace_str, BUTT_REPLACE_STRING)
     else:
         return_str = "Could not find the delimiter '$'' to specify the replace str\n"
@@ -79,24 +80,18 @@ def replace_with_butts(msg):
 
         words = msg.split()
         num_words = len(words)
-        num_to_replace = int(0.5 * num_words)
+        num_to_replace = max(5, int(0.2 * num_words), 1)
 
         replace_words = []
-        rand_numbers = []
 
-        for _ in (0, num_to_replace):
+        while len(replace_words) < num_to_replace:
             rand_num = random.randint(0, num_words - 1)
-            if rand_num not in rand_numbers:
-                rand_numbers.append(rand_num)
-            else:
-                _ -= 1
-
-        for i in rand_numbers:
-            replace_words.append(words[i])
+            if words[rand_num] not in replace_words and len(words[rand_num]) > 2:
+                replace_words.append(words[rand_num])
 
         new_msg = msg
         for word in replace_words:
-            new_msg = new_msg.replace(word, BUTT_REPLACE_STRING)
+            new_msg = new_msg.replace(" " + word + " ", " " + BUTT_REPLACE_STRING + " ")
 
         return_str += new_msg
         return return_str
