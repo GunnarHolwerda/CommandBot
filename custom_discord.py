@@ -8,10 +8,10 @@ import discord
 import asyncio
 import user
 import os
+#from discord_commands import sports_commands
+from discord_commands.sports_commands.nba_command import NBACommand
 from discord_functions import strip_command_string, parse_command
-from discord_commands import get_corner_text, replace_with_butts, code_wrap,\
-    get_nba_scores, get_ncaam_scores
-
+from discord_commands_old import get_corner_text, replace_with_butts, code_wrap
 client = discord.Client()
 
 
@@ -25,6 +25,9 @@ def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('-------------')
+
+    cmd = NBACommand("")
+    cmd.run()
 
 
 @client.event
@@ -62,16 +65,16 @@ def on_message(message):
         code_str = code_wrap(code)
         yield from client.send_message(message.channel, code_str)
 
-    elif msg.startswith('!nba'):
-        args = strip_command_string('!nba', msg)
-        opts_args = parse_command(args)
-        new_msg = code_wrap(get_nba_scores(opts_args))
-        yield from client.send_message(message.channel, new_msg)
-
-    elif msg.startswith('!ncaam'):
-        args = strip_command_string('!ncaam', msg)
-        opts_args = parse_command(args)
-        new_msg = code_wrap(get_ncaam_scores(opts_args))
-        yield from client.send_message(message.channel, new_msg)
+    # elif msg.startswith('!nba'):
+    #     args = strip_command_string('!nba', msg)
+    #     opts_args = parse_command(args)
+    #     new_msg = code_wrap(get_nba_scores(opts_args))
+    #     yield from client.send_message(message.channel, new_msg)
+    #
+    # elif msg.startswith('!ncaam'):
+    #     args = strip_command_string('!ncaam', msg)
+    #     opts_args = parse_command(args)
+    #     new_msg = code_wrap(get_ncaam_scores(opts_args))
+    #     yield from client.send_message(message.channel, new_msg)
 
 client.run(user.email, user.password)
