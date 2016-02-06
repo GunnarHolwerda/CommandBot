@@ -16,6 +16,12 @@ BUTT_REPLACE_STRING = "butts"
 ESPN_NBA_BASE_URL = "http://espn.go.com/nba/scoreboard/_/"
 ESPN_NCAAM_BASE_URL = "http://espn.go.com/mens-college-basketball/scoreboard/_/"
 
+# ESPN GAME STATE CONSTANTS
+ESPN_GAME_NOT_STARTED = "STATUS_SCHEDULED"
+ESPN_GAME_IN_PROGRESS = "STATUS_IN_PROGRESS"
+ESPN_GAME_HALFTIME = "STATUS_HALFTIME"
+ESPN_GAME_FINISHED = "STATUS_FINAL"
+
 
 def space_string(str_value):
     """
@@ -91,7 +97,8 @@ def replace_with_butts(msg):
 
         new_msg = msg
         for word in replace_words:
-            new_msg = new_msg.replace(" " + word + " ", " " + BUTT_REPLACE_STRING + " ")
+            new_msg = new_msg.replace(
+                " " + word + " ", " " + BUTT_REPLACE_STRING + " ")
 
         return_str += new_msg
         return return_str
@@ -135,23 +142,7 @@ def get_nba_scores(args=None):
         "{}date/{}".format(ESPN_NBA_BASE_URL, date_string))
     scores = __create_scores_dict(data)
 
-    msg = ""
-    for _, score in scores.items():
-        team_one = score['teams'].pop()
-        team_two = score['teams'].pop()
-
-        # Determine winner, losing team has lowercase abbreviation
-        if team_one['winner']:
-            team_two['abbreviation'] = team_two['abbreviation'].lower()
-        else:
-            team_one['abbreviation'] = team_one['abbreviation'].lower()
-
-        msg += "{: <3} vs {: <3} ... {: <3}-{: >3} {}\n" \
-            .format(team_one['abbreviation'],
-                    team_two['abbreviation'],
-                    team_one['score'],
-                    team_two['score'],
-                    score['status']['description'])
+    msg = __generate_score_printout(scores)
     return msg
 
 
@@ -174,24 +165,49 @@ def get_ncaam_scores(args=None):
         "{}date/{}".format(ESPN_NCAAM_BASE_URL, date_string))
     scores = __create_scores_dict(data)
 
-    msg = ""
+    msg = __generate_score_printout(scores)
+    return msg
+
+
+def __generate_score_printout(scores):
+    """
+        Generates the printout for sport score commands
+
+        @param: scores, a dictionary containing score data
+        @return: the string printout of the game states
+    """
+    final_scores = "Final Scores:\n"
+    in_progress = "In Progess:\n"
+    not_started = "Not started:\n"
     for _, score in scores.items():
+        game_state = score['status']['state']
         team_one = score['teams'].pop()
         team_two = score['teams'].pop()
 
         # Determine winner, losing team has lowercase abbreviation
-        if team_one['winner']:
-            team_two['abbreviation'] = team_two['abbreviation'].lower()
-        else:
-            team_one['abbreviation'] = team_one['abbreviation'].lower()
+        if game_state == ESPN_GAME_FINISHED:
+            if team_one['winner']:
+                team_two['abbreviation'] = team_two['abbreviation'].lower()
+            elif team_two['winner']:
+                team_one['abbreviation'] = team_one['abbreviation'].lower()
 
-        msg += "{:<4} vs {:<4} ... {:<3}-{:>3} {}\n" \
-            .format(team_one['abbreviation'],
-                    team_two['abbreviation'],
-                    team_one['score'],
-                    team_two['score'],
-                    score['status']['description'])
-    return msg
+        score_str = "{:<4} vs {:<4} ... {:<3}-{:>3} {}\n".format(team_one['abbreviation'],
+                                                                 team_two[
+                                                                     'abbreviation'],
+                                                                 team_one[
+                                                                     'score'],
+                                                                 team_two[
+                                                                     'score'],
+                                                                 score['status']['description'])
+
+        if game_state == ESPN_GAME_FINISHED:
+            final_scores += score_str
+        elif game_state == ESPN_GAME_IN_PROGRESS or game_state == ESPN_GAME_IN_PROGRESS:
+            in_progress += score_str
+        else:
+            not_started += score_str
+
+    return not_started + "\n" + in_progress + "\n" + final_scores
 
 
 def __extract_espn_json_scoreboard_data(url):
@@ -225,7 +241,8 @@ def __create_scores_dict(json_data):
         scores[game_id] = {'status': {
             'period': competition['status']['period'],
             'time': competition['status']['displayClock'],
-            'description': competition['status']['type']['shortDetail']
+            'description': competition['status']['type']['shortDetail'],
+            'state': competition['status']['type']['name']
         }}
 
         scores[game_id]['teams'] = []
@@ -252,6 +269,7 @@ def __create_scores_dict(json_data):
             )
 
     return scores
+
 
 def __parse_date_option(args=None):
     """
