@@ -10,7 +10,7 @@ import user
 import os
 from pprint import pprint
 #from discord_commands import sports_commands
-from discord_commands.sports_commands.nba_command import NBACommand
+from discord_commands.sports_commands.ncaam_command import NCAAMCommand
 from discord_functions import strip_command_string
 from discord_commands_old import get_corner_text, replace_with_butts, code_wrap
 client = discord.Client()
@@ -25,8 +25,6 @@ def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('-------------')
-    cmd = NBACommand("")
-    print(cmd.run())
 
 
 @client.event

@@ -1,7 +1,7 @@
 """
     Implementation of Sportcommand for NCAAM Basketball Scores
 """
-from sport_command import SportCommand
+from .sport_command import SportCommand
 from discord_commands.command import BaseCommand
 
 
@@ -15,18 +15,17 @@ class NCAAMCommand(BaseCommand, SportCommand):
             $date=value (value must follow %m/%d/%Y format)
     """
     def __init__(self, command_str):
-        BaseCommand.__init__(self, command_str)
-        self.command = "!ncaam"
-        SportCommand.__init__(self)
-        self.__espn_url = "http://espn.go.com/mens-college-basketball/scoreboard/_/"
+        super(NCAAMCommand, self).__init__(command_str)
+        self._command = "!ncaam"
+        self._espn_url = "http://espn.go.com/mens-college-basketball/scoreboard/_/"
 
     def run(self):
-        date_string = BaseCommand.__parse_date_option(self)
+        date_string = super(NCAAMCommand, self)._parse_date_option()
+        date_url = "date/{}".format(date_string)
 
-        data = SportCommand.__extract_espn_json_scoreboard_data(
-            "{}date/{}".format(self.espn_url, date_string))
-        scores = SportCommand.__create_scores_dict(data)
+        data = super(NCAAMCommand, self)._extract_espn_json_scoreboard_data(date_url=date_url)
+        scores = SportCommand._create_scores_dict(data)
 
-        msg = SportCommand.__generate_score_printout(scores)
+        msg = SportCommand._generate_score_printout(scores)
 
         return msg
