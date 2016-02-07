@@ -15,6 +15,7 @@ class NCAAMCommand(BaseCommand, SportCommand):
             $date=value (value must follow %m/%d/%Y format)
     """
     def __init__(self, command_str):
+        print("instantiated")
         super(NCAAMCommand, self).__init__(command_str)
         self._command = "!ncaam"
         self._espn_url = "http://espn.go.com/mens-college-basketball/scoreboard/_/"
