@@ -6,10 +6,8 @@ import json
 import requests
 import re
 
-from ..command import BaseCommand
 
-
-class SportCommand(BaseCommand):
+class SportCommand:
     """
         Abstract class for all SportCommands
     """
@@ -20,17 +18,21 @@ class SportCommand(BaseCommand):
     ESPN_GAME_FINISHED = "STATUS_FINAL"
 
     def __init__(self, command_str):
+        print("SportCommand Constructor being called")
         super(SportCommand, self).__init__(command_str)
-        self.__espn_url = ""
+        self._espn_url = ""
 
     # SportCommand methods
-    def __extract_espn_json_scoreboard_data(self):
+    def _extract_espn_json_scoreboard_data(self, date_url=None):
         """
             Extracts JSON object from ESPN scoreboard page and returns as a json
             object
             @return: dictionary built from the json object found on the page
         """
-        page = requests.get(self.__espn_url).text
+        url = self._espn_url + date_url
+        print(url)
+
+        page = requests.get(url).text
         # Load scoreboardData json object off of page to parse for information
         json_text = re.search(
             r'window\.espn\.scoreboardData\s*=\s*({.*});window', page).group(1)
@@ -39,7 +41,7 @@ class SportCommand(BaseCommand):
         return json_data
 
     @staticmethod
-    def __create_scores_dict(json_data):
+    def _create_scores_dict(json_data):
         """
             Parses JSON object from ESPN to build a scores dictionary of scores for
             the day
@@ -55,7 +57,8 @@ class SportCommand(BaseCommand):
             scores[game_id] = {'status': {
                 'period': competition['status']['period'],
                 'time': competition['status']['displayClock'],
-                'description': competition['status']['type']['shortDetail']
+                'description': competition['status']['type']['shortDetail'],
+                'state': competition['status']['type']['name']
             }}
 
             scores[game_id]['teams'] = []
@@ -84,7 +87,7 @@ class SportCommand(BaseCommand):
         return scores
 
     @classmethod
-    def __generate_score_printout(cls, scores):
+    def _generate_score_printout(cls, scores):
         """
             Generates the printout for sport score commands
             @param: scores, a dictionary containing score data
@@ -116,13 +119,12 @@ class SportCommand(BaseCommand):
 
             if game_state == cls.ESPN_GAME_FINISHED:
                 final_scores += score_str
-            elif game_state == cls.ESPN_GAME_IN_PROGRESS or game_state == cls.ESPN_GAME_IN_PROGRESS:
+            elif game_state == cls.ESPN_GAME_IN_PROGRESS or game_state == cls.ESPN_GAME_HALFTIME:
                 in_progress += score_str
             else:
                 not_started += score_str
 
         return not_started + "\n" + in_progress + "\n" + final_scores
 
-    # BaseCommand methods
-    def __run__(self):
-        raise NotImplementedError
+    def run(self):
+        super(SportCommand, self).run()

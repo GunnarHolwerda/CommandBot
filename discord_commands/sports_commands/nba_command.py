@@ -1,10 +1,10 @@
 """
     Implementation of Sportcommand for NBA Scores
 """
-from . import SportCommand
+from .sport_command import SportCommand
+from discord_commands.command import BaseCommand
 
-
-class NBACommand(SportCommand):
+class NBACommand(SportCommand, BaseCommand):
     """
         Scrapes ESPN.com for NBA scores and prints out all scores for the day
 
@@ -15,17 +15,19 @@ class NBACommand(SportCommand):
     """
     def __init__(self, command_str):
         super(NBACommand, self).__init__(command_str)
-        self.__espn_url = "http://espn.go.com/nba/scoreboard/_/"
-        self.command = "!nba"
+        #super(NBACommand, self).__init__()
+        self._espn_url = "http://espn.go.com/nba/scoreboard/_/"
+        self._command = "!nba"
 
 
-    def __run__(self):
-        date_string = super(NBACommand, self).__parse_date_option()
 
-        data = super(NBACommand, self).__extract_espn_json_scoreboard_data(
-            "{}date/{}".format(self.espn_url, date_string))
-        scores = super(NBACommand, self).__create_scores_dict(data)
+    def run(self):
+        date_string = super(NBACommand, self)._parse_date_option()
+        date_url = "date/{}".format(date_string)
 
-        msg = super(NBACommand, self).__generate_score_printout(scores)
+        data = super(NBACommand, self)._extract_espn_json_scoreboard_data(date_url=date_url)
+        scores = SportCommand._create_scores_dict(data)
+
+        msg = SportCommand._generate_score_printout(scores)
 
         return msg
