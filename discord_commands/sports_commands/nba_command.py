@@ -29,4 +29,4 @@ class NBACommand(SportCommand, BaseCommand):
 
         msg = SportCommand._generate_score_printout(scores)
 
-        return msg
+        return self.code_wrap(msg)

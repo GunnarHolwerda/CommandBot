@@ -95,6 +95,8 @@ class BaseCommand:
         else:
             return msg[:index]
 
+    def code_wrap(self, string):
+        return '```' + string + '```'
 
     # Abstract Methods
     def run(self):

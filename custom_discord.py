@@ -11,9 +11,8 @@ import os
 from pprint import pprint
 #from discord_commands import sports_commands
 from discord_commands.sports_commands.ncaam_command import NCAAMCommand
-from discord_commands.dankmemes_command import DankMemesCommand
+from discord_commands.cowsay_command import CowSayCommand
 from discord_functions import strip_command_string
-from discord_commands_old import get_corner_text, replace_with_butts, code_wrap
 client = discord.Client()
 
 @client.event
@@ -26,10 +25,6 @@ def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('-------------')
-
-    cmd = DankMemesCommand("dankmemes")
-    print(cmd.run())
-
 
 @client.event
 @asyncio.coroutine
@@ -53,12 +48,8 @@ def on_message(message):
 
     elif msg.startswith('!cowsay'):
         sentence = strip_command_string('!cowsay', msg)
-        # This command runs a command in the terminal, checks for && or ; to
-        # avoid someone running malicious commands
-        if sentence.find('&&') == -1 and sentence.find(';') == -1:
-            new_msg = os.popen("cowsay %s" % sentence).read()
-        else:
-            return
+        cmd = CowSayCommand("dankmemes")
+        new_msg = cmd.run()
         yield from client.send_message(message.channel, new_msg)
 
     elif msg.startswith('!code'):

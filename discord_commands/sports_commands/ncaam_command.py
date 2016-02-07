@@ -28,4 +28,4 @@ class NCAAMCommand(BaseCommand, SportCommand):
 
         msg = SportCommand._generate_score_printout(scores)
 
-        return msg
+        return self.code_wrap(msg)

@@ -13,7 +13,8 @@ class ButtCommand(BaseCommand):
         OR
         A user can let the program randomly pick words to replace with butts
 
-        Required arguments: None
+        Required arguments:
+            A string or sentence
 
         Supported options:
             $replace=value (value is the word to be replaced in the sentence)

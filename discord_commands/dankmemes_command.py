@@ -12,7 +12,8 @@ class DankMemesCommand(BaseCommand):
         L
         O
 
-        Required arguments: None
+        Required arguments:
+            A string or sentence
 
         Supported options:
             $space=true
