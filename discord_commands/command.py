@@ -11,11 +11,10 @@ class BaseCommand:
     """
 
     def __init__(self, command_str):
-        print("BaseCommand constructor being called")
         self._command = ""
-        self._command_str = command_str
-        self._opts = self.__parse_options()
-        self._args = self.__parse_args()
+        self._command_str = self.__strip_options(command_str)
+        self._opts = self.__parse_options(command_str)
+        self._args = self.__parse_args(command_str)
 
     def _parse_date_option(self):
         """
@@ -35,7 +34,7 @@ class BaseCommand:
 
         return date_string
 
-    def __parse_args(self):
+    def __parse_args(self, command_str):
         """
             Strips all arguments from a command string and returns them as a dict
 
@@ -47,20 +46,20 @@ class BaseCommand:
         """
         args = ()
 
-        option_start_index = self._command_str.find('$') - 1
+        option_start_index = command_str.find('$') - 1
         if option_start_index >= -1:
             # Check if no args passed then we need to add back the 1 location, that
             # is supposed to be for a space
             if option_start_index == -1:
                 option_start_index = 0
-            self._command_str = self._command_str[:option_start_index]
+            command_str = command_str[:option_start_index]
 
-        args = self._command_str.split(' ')
+        args = command_str.split(' ')
 
         return args
 
 
-    def __parse_options(self):
+    def __parse_options(self, command_str):
         """
             Strips all options from a command string and returns them as a dict
 
@@ -72,7 +71,7 @@ class BaseCommand:
         """
         options = {}
 
-        command_arr = self._command_str.split(' ')
+        command_arr = command_str.split(' ')
 
         for word in command_arr:
             if word.startswith('$'):
@@ -83,6 +82,18 @@ class BaseCommand:
                 options[opt] = value
 
         return options
+
+    def __strip_options(self, msg):
+        """
+            Strips the options off of the end of the command_str
+
+            @returns: str, command_str with no options on the end
+        """
+        index = msg.find('$') - 1
+        if index == -2:
+            return msg
+        else:
+            return msg[:index]
 
 
     # Abstract Methods

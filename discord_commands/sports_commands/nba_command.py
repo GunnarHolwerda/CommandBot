@@ -15,7 +15,6 @@ class NBACommand(SportCommand, BaseCommand):
     """
     def __init__(self, command_str):
         super(NBACommand, self).__init__(command_str)
-        #super(NBACommand, self).__init__()
         self._espn_url = "http://espn.go.com/nba/scoreboard/_/"
         self._command = "!nba"
 

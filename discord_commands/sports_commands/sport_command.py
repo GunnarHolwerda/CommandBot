@@ -18,7 +18,6 @@ class SportCommand:
     ESPN_GAME_FINISHED = "STATUS_FINAL"
 
     def __init__(self, command_str):
-        print("SportCommand Constructor being called")
         super(SportCommand, self).__init__(command_str)
         self._espn_url = ""
 
