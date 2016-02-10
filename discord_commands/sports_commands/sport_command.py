@@ -22,15 +22,15 @@ class SportCommand:
         self._espn_url = ""
 
     # SportCommand methods
-    def _extract_espn_json_scoreboard_data(self, date_url=None):
+    def _extract_espn_json_scoreboard_data(self, url_options=None):
         """
             Extracts JSON object from ESPN scoreboard page and returns as a json
             object
             @return: dictionary built from the json object found on the page
         """
-        url = self._espn_url + date_url
+        url = self._espn_url + url_options
         page = requests.get(url).text
-        
+
         # Load scoreboardData json object off of page to parse for information
         json_text = re.search(
             r'window\.espn\.scoreboardData\s*=\s*({.*});window', page).group(1)

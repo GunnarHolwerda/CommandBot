@@ -24,7 +24,7 @@ class NBACommand(SportCommand, BaseCommand):
         date_string = super(NBACommand, self)._parse_date_option()
         date_url = "date/{}".format(date_string)
 
-        data = super(NBACommand, self)._extract_espn_json_scoreboard_data(date_url=date_url)
+        data = super(NBACommand, self)._extract_espn_json_scoreboard_data(url_options=date_url)
         scores = SportCommand._create_scores_dict(data)
 
         msg = SportCommand._generate_score_printout(scores)
