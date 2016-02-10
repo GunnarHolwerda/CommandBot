@@ -26,7 +26,7 @@ class BaseCommand:
             @return: date_string, string date in %Y%m%d format
         """
         if self._opts and 'date' in self._opts:
-            date_obj = datetime.strptime(self.opts['date'], "%m/%d/%Y")
+            date_obj = datetime.strptime(self._opts['date'], "%m/%d/%Y")
             date_string = date_obj.strftime("%Y%m%d")
         else:
             date_obj = datetime.now()

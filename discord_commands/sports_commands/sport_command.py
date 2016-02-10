@@ -29,9 +29,8 @@ class SportCommand:
             @return: dictionary built from the json object found on the page
         """
         url = self._espn_url + date_url
-        print(url)
-
         page = requests.get(url).text
+        
         # Load scoreboardData json object off of page to parse for information
         json_text = re.search(
             r'window\.espn\.scoreboardData\s*=\s*({.*});window', page).group(1)
@@ -70,18 +69,21 @@ class SportCommand:
                 elif 'curatedRank' in team:
                     rank = team['curatedRank']['current']
 
-                scores[game_id]['teams'].append(
-                    {
-                        'rank': rank,
-                        'score': team['score'],
-                        'team': team['team']['name'],
-                        'location': team['team']['location'],
-                        'displayName': team['team']['displayName'],
-                        'abbreviation': team['team']['abbreviation'],
-                        'record': team['records'][0]['summary'],
-                        'winner': team['winner']
-                    }
-                )
+                team_dict = {
+                    'rank': rank,
+                    'score': team['score'],
+                    'team': team['team']['name'],
+                    'location': team['team']['location'],
+                    'displayName': team['team']['displayName'],
+                    'abbreviation': team['team']['abbreviation'],
+                    'winner': team['winner']
+                }
+
+                # For unknown teams, records aren't kept and are None
+                if team['records']:
+                    team_dict['record'] = team['records'][0]['summary']
+
+                scores[game_id]['teams'].append(team_dict)
 
         return scores
 
