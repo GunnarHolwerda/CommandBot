@@ -1,0 +1,4 @@
+cryptography==1.2.1
+discord.py==0.10.0a0
+requests==2.8.1
+spotipy==2.3.7
