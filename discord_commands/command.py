@@ -96,6 +96,14 @@ class BaseCommand:
             return msg[:index]
 
     def code_wrap(self, string):
+        """
+            Returns string wrapped in triple back ticks to create code
+            formatting in discord
+
+            @param: string, any string
+
+            @return: ``` + string + ```
+        """
         return '```' + string + '```'
 
     # Abstract Methods

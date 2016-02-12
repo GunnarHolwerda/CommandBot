@@ -8,6 +8,7 @@ from discord_commands.cowsay_command import CowSayCommand
 from discord_commands.dankmemes_command import DankMemesCommand
 from discord_commands.sports_commands.nba_command import NBACommand
 from discord_commands.sports_commands.ncaam_command import NCAAMCommand
+from discord_commands.spotify_commands.spotify_search_command import SpotifySearchCommand
 
 
 commands = {
@@ -15,7 +16,8 @@ commands = {
     '!ncaam': NCAAMCommand,
     '!dankmemes': DankMemesCommand,
     '!cowsay': CowSayCommand,
-    '!butt': ButtCommand
+    '!butt': ButtCommand,
+    '!song': SpotifySearchCommand
 }
 
 def run_command(msg_content):

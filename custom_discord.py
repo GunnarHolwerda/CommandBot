@@ -8,6 +8,7 @@ import discord
 import asyncio
 import user
 from commands import run_command
+
 client = discord.Client()
 
 @client.event
@@ -20,6 +21,7 @@ def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('-------------')
+
 
 @client.event
 @asyncio.coroutine
