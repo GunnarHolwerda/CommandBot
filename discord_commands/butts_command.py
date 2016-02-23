@@ -4,6 +4,7 @@
 
 import random
 from .command import BaseCommand
+from pprint import pprint
 
 class ButtCommand(BaseCommand):
     """
@@ -51,7 +52,8 @@ class ButtCommand(BaseCommand):
 
         words = msg.split()
         num_words = len(words)
-        num_to_replace = max(5, int(0.2 * num_words), 1)
+        print("Num words " + str(num_words))
+        num_to_replace = min(5, max(int(0.2 * num_words), 1))
 
         replace_words = []
 
@@ -59,6 +61,8 @@ class ButtCommand(BaseCommand):
             rand_num = random.randint(0, num_words - 1)
             if words[rand_num] not in replace_words and len(words[rand_num]) > 2:
                 replace_words.append(words[rand_num])
+
+        pprint(replace_words)
 
         new_msg = msg
         for word in replace_words:
