@@ -24,7 +24,7 @@ class ButtCommand(BaseCommand):
 
     def __init__(self, command_str):
         super(ButtCommand, self).__init__(command_str)
-        self._command = "!butts"
+        self._command = "!butt"
 
     def run(self):
         if 'replace' in self._opts:
