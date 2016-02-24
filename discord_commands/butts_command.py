@@ -33,6 +33,21 @@ class ButtCommand(BaseCommand):
         else:
             return self.__random_replace()
 
+    @staticmethod
+    def help():
+        return """
+            Returns a the message with specific words replaced with 'butts'.
+            A user can choose what word to replace by using the $replace option
+            OR
+            A user can let the program randomly pick words to replace with butts
+
+            Required arguments:
+                A string or sentence
+
+            Supported options:
+                $replace=value (value is the word to be replaced in the sentence)
+        """
+
     def __chosen_replace(self):
         """
             This method gets called when the replace option has been passed
@@ -52,7 +67,6 @@ class ButtCommand(BaseCommand):
 
         words = msg.split()
         num_words = len(words)
-        print("Num words " + str(num_words))
         num_to_replace = min(5, max(int(0.2 * num_words), 1))
 
         replace_words = []
@@ -61,8 +75,6 @@ class ButtCommand(BaseCommand):
             rand_num = random.randint(0, num_words - 1)
             if words[rand_num] not in replace_words and len(words[rand_num]) > 2:
                 replace_words.append(words[rand_num])
-
-        pprint(replace_words)
 
         new_msg = msg
         for word in replace_words:

@@ -28,3 +28,16 @@ class CowSayCommand(BaseCommand):
             return self.code_wrap(os.popen("cowsay %s" % self._command_str).read())
         else:
             return "Nice try."
+
+    @staticmethod
+    def help():
+        return """
+            Runs cowsay on the string passed and prints out the command from the
+            cow
+
+            Required Arguments:
+                A str or sentence (SENTENCE MUST BE WRAPPED IN QUOTES)
+
+            Options Supported:
+                None
+        """

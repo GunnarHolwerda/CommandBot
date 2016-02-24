@@ -18,7 +18,6 @@ class DankMemesCommand(BaseCommand):
         Supported options:
             $space=true
     """
-    BUTT_REPLACE_STRING = "butts"
 
     def __init__(self, command_str):
         super(DankMemesCommand, self).__init__(command_str)
@@ -38,6 +37,22 @@ class DankMemesCommand(BaseCommand):
                 corner_text += c + "\n"
 
         return corner_text
+
+    @staticmethod
+    def help():
+        return """
+            Returns a string like so with input: yolo
+            YOLO
+            O
+            L
+            O
+
+            Required arguments:
+                A string or sentence
+
+            Supported options:
+                $space=true (Places spaces between each character)
+        """
 
     def __space_string(self, str_value):
         """

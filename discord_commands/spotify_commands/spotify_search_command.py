@@ -16,13 +16,18 @@ class SpotifySearchCommand(SpotifyCommand, BaseCommand):
             $type=value (Type of search: artist, track, album, playlist)
     """
 
+    SUPPORTED_SEARCH_TYPES = ['artist', 'track', 'album', 'playlist']
+
     def __init__(self, command_str):
         super(SpotifySearchCommand, self).__init__(command_str)
         self._command = "!song"
 
     def run(self):
         if 'type' in self._opts:
-            search_type = self._opts['type']
+            if self._opts['type'] in SpotifySearchCommand.SUPPORTED_SEARCH_TYPES:
+                search_type = self._opts['type']
+            else:
+                return "Unknown type specified\n" + self.help()
         else:
             search_type = 'track'
 
@@ -37,3 +42,15 @@ class SpotifySearchCommand(SpotifyCommand, BaseCommand):
             url = "No results found."
 
         return url
+
+    @staticmethod
+    def help():
+        return """
+            Searches Spotify for a value and returns a link to the first result
+
+            Required arguments:
+                String to search for (track name)
+
+            Supported options:
+                $type=value (Type of search: artist, track, album, playlist)
+        """

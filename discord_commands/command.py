@@ -54,7 +54,8 @@ class BaseCommand:
                 option_start_index = 0
             command_str = command_str[:option_start_index]
 
-        args = command_str.split(' ')
+        if command_str:
+            args = command_str.split(' ')
 
         return args
 
@@ -110,5 +111,12 @@ class BaseCommand:
     def run(self):
         """
             Command to be overwritten that will run the command
+        """
+        raise NotImplementedError()
+
+    @staticmethod
+    def help():
+        """
+            Command to be overwritten that will display help
         """
         raise NotImplementedError()

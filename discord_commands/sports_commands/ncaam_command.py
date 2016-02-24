@@ -75,6 +75,28 @@ class NCAAMCommand(BaseCommand, SportCommand):
 
         return self.code_wrap(msg)
 
+    @staticmethod
+    def help():
+        return """
+            Scrapes ESPN.com for NCAAM scores and prints out all scores for the day
+            defaults to teams in the top 25
+
+            Required arguments: None
+
+            Supported options:
+                $date=value (value must follow %m/%d/%Y format)
+                $conf=value (value is a 3 letter code for a conference)
+                    Most Popular Conference codes:
+                        all - All NCAA Division 1 games
+                        acc - Atlantic Coast Conference
+                        b12 - Big 12 Conference
+                        est - Big East Conference
+                        b10 - Big 10 Conference
+                        pac - Pac-12 Conference
+
+                    ** All conferences supported, but not listed here
+        """
+
     def __parse_conference_option(self, conference):
         """
             Based on conference option returns part of url needed

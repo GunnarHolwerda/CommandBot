@@ -1,24 +1,9 @@
 """
-    This file runs the command
+    Command Dispatcher
 """
 
 from discord_commands.command import BaseCommand
-from discord_commands.butts_command import ButtCommand
-from discord_commands.cowsay_command import CowSayCommand
-from discord_commands.dankmemes_command import DankMemesCommand
-from discord_commands.sports_commands.nba_command import NBACommand
-from discord_commands.sports_commands.ncaam_command import NCAAMCommand
-from discord_commands.spotify_commands.spotify_search_command import SpotifySearchCommand
-
-
-commands = {
-    '!nba': NBACommand,
-    '!ncaam': NCAAMCommand,
-    '!dankmemes': DankMemesCommand,
-    '!cowsay': CowSayCommand,
-    '!butt': ButtCommand,
-    '!song': SpotifySearchCommand
-}
+from discord_commands.all_commands import commands
 
 def run_command(msg_content):
     """

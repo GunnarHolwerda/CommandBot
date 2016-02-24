@@ -7,7 +7,7 @@
 import discord
 import asyncio
 import user
-from commands import run_command
+from command_dispatcher import run_command
 
 client = discord.Client()
 

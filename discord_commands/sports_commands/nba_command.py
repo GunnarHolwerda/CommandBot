@@ -30,3 +30,14 @@ class NBACommand(SportCommand, BaseCommand):
         msg = SportCommand._generate_score_printout(scores)
 
         return self.code_wrap(msg)
+
+    @staticmethod
+    def help():
+        return """
+            Scrapes ESPN.com for NBA scores and prints out all scores for the day
+
+            Required arguments: None
+
+            Supported options:
+                $date=value (value must follow %m/%d/%Y format)
+        """
