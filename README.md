@@ -115,6 +115,17 @@ T
 ##### Description
 *   Prints out a cow saying whatever words you passed it.
 
+`!help <command>`
+##### Arguments
+*   command, command (i.e. !dankmemes) to get the help text for, if no command
+    is passed all commands on the system will be printed out in a list
+
+##### Options
+*   None
+
+##### Description
+*   Prints out help text for a specified command
+
 # Notes
 I work on this in my free time and would love to hear suggestions you have for other commands you would like.
 
@@ -132,6 +143,6 @@ The current way to add a command would be to add a file or folder to discord_com
 
 Make sure your command extends `BaseCommand` defined in command.py as that class takes care of parsing options and arguments
 
-Implement the `run` method on your command and have it return the string for the message that will be sent.
+Implement the `run` and static 'help' method on your command and have it return the string for the message that will be sent and the help text to be displayed when !help is called.
 
-Import your command into commands.py and add an entry in the commands dictionary with your command as the key and your class name as the value.
+Import your command into all_commands.py and add an entry in the commands dictionary with your command as the key and your class name as the value.
