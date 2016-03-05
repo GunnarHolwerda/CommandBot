@@ -8,6 +8,7 @@ import argparse
 import asyncio
 import discord
 import user
+import os
 from command_dispatcher import run_command
 
 if __name__ == "__main__":
@@ -19,8 +20,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.update_commands:
-        #TODO: Run update script
-        pass
+        os.system('/usr/bin/python3 scripts/update_all_commands.py')
 
     # Start the bot
     client = discord.Client()
