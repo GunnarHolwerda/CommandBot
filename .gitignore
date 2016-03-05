@@ -3,3 +3,6 @@
 
 # Json file of ESPN scoreboardData
 temp.json
+
+# Ignore .idea folder from PyCharm
+.idea/

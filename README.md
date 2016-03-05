@@ -133,7 +133,7 @@ I work on this in my free time and would love to hear suggestions you have for o
 *   Create NCAACommand to have a NCAAMCommand extend from so that I can include the conference information in other college athletic commands that I may add
 *   Delete the command message that has been sent
 *   Add ability for commands to have a short option (i.e. !dankmemes could also be used as !dank or !d, etc)
-*   Create a refresh script that will parse all commands in discord_commands and build commands.py from that, so that any new command added, doesn't need to be manually added.
+*   Create a refresh script that will parse all commands in discord_commands and build all_commands.py from that, so that any new command added, doesn't need to be manually added.
 
 
 # Development
