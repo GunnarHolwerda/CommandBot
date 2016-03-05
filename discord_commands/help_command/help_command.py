@@ -2,7 +2,7 @@
     Command for getting helptext for another command
 """
 
-from .command import BaseCommand
+from ..command import BaseCommand
 
 class HelpCommand(BaseCommand):
     """
@@ -22,7 +22,7 @@ class HelpCommand(BaseCommand):
         self._command = "!help"
 
     def run(self):
-        from .all_commands import commands
+        from ..all_commands import commands
         if self._args:
             return commands[self._args[0]].help()
         else:

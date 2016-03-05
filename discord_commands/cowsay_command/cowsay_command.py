@@ -3,7 +3,7 @@
 """
 
 import os
-from .command import BaseCommand
+from ..command import BaseCommand
 
 class CowSayCommand(BaseCommand):
     """

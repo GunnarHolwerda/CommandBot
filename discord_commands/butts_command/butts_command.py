@@ -3,8 +3,7 @@
 """
 
 import random
-from .command import BaseCommand
-from pprint import pprint
+from ..command import BaseCommand
 
 class ButtCommand(BaseCommand):
     """

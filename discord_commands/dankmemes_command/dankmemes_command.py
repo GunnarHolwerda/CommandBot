@@ -2,7 +2,7 @@
     Holds the Command to run the dankmemes command
 """
 
-from .command import BaseCommand
+from ..command import BaseCommand
 
 class DankMemesCommand(BaseCommand):
     """

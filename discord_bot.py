@@ -4,12 +4,27 @@
     This program adds commands to a discord server being logged in by the user
     specified in user.py
 """
-import discord
+import argparse
 import asyncio
+import discord
 import user
 from command_dispatcher import run_command
 
-client = discord.Client()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Discord Bot")
+    parser.add_argument('-u', '--update-commands', dest='update_commands',
+                        action='store_true',
+                        help='Updates all_commands.py file to include any' +
+                        ' new commands added to discord_commands directory')
+    args = parser.parse_args()
+
+    if args.update_commands:
+        #TODO: Run update script
+        pass
+
+    # Start the bot
+    client = discord.Client()
+
 
 @client.event
 @asyncio.coroutine
