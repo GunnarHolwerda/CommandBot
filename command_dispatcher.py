@@ -24,21 +24,22 @@ def run_command(msg_content):
     else:
         return None
 
+
 def get_command_str(msg_content):
     """
         Strips off the command and space from the front of the message content
 
-        @param: command, the command string without a space to be stripped
-        @param: msg_content, the full message to strip the command from
+        @param msg_content: str, the command string without a space to be stripped
 
         @return: returns the message content - command string
     """
     return " ".join(msg_content.split()[1:])
 
+
 def get_command(msg_content):
     """
         Strips off the command from the front end of the message
 
-        @param: msg_content, the whole message to get the command from
+        @param msg_content: str, the whole message to get the command from
     """
     return msg_content.split()[0]

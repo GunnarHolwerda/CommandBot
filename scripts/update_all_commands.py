@@ -28,11 +28,13 @@ def get_all_command_files():
 
 def build_all_commands(files):
     """
-    Builds a dictionary of all of the commands
+    Builds a dictionary of all of the commands, removes unncessary files from files parameter
+    and returns updated files list
 
     :param files: list
 
     :return: dictionary of command to class name for the command
+    :return: list of files that have commands in them
     """
 
     cmd_pattern = re.compile(r'self\._command = \"(![a-zA-Z0-9]*)\"')
