@@ -21,6 +21,7 @@ if __name__ == "__main__":
 
     if args.update_commands:
         os.system('/usr/bin/python3 scripts/update_all_commands.py')
+        exit()
 
     # Start the bot
     client = discord.Client()
