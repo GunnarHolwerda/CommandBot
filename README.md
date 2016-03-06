@@ -145,4 +145,4 @@ Make sure your command extends `BaseCommand` defined in command.py as that class
 
 Implement the `run` and static 'help' method on your command and have it return the string for the message that will be sent and the help text to be displayed when !help is called.
 
-Import your command into all_commands.py and add an entry in the commands dictionary with your command as the key and your class name as the value.
+Run `./discord_bot.py -u` to auto generate a new all_commands.py file which will allow you to run your command after starting the bot again.
