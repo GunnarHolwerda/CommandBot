@@ -14,15 +14,15 @@ Edit `user.py` to include your username and password for your Discord Account. F
 
 #### Run the client
 To run the client:
-`$ python3 custom_discord.py`
+`$ python3 discord_bot.py`
 
 Or you can make custom_discord.py executable and run it that way too.
 
 If you want the command to run in the background and be able to close the terminal window you run it in:
 
-`$ chmod +x /path/to/custom_discord.py`
+`$ chmod +x /path/to/discord_bot.py`
 
-`$ nohup ./custom_discord.py &`
+`$ nohup ./discord_bot.py &`
 
 In order to kill the command after running it with nohup, use `$ ps -ef | grep python3` to find the process id of the program and then kill it using `kill -9 <pid>`.
 
@@ -133,16 +133,14 @@ I work on this in my free time and would love to hear suggestions you have for o
 *   Create NCAACommand to have a NCAAMCommand extend from so that I can include the conference information in other college athletic commands that I may add
 *   Delete the command message that has been sent
 *   Add ability for commands to have a short option (i.e. !dankmemes could also be used as !dank or !d, etc)
-*   Create a refresh script that will parse all commands in discord_commands and build all_commands.py from that, so that any new command added, doesn't need to be manually added.
-
 
 # Development
 If you would like to help develop for this project feel free!
 
-The current way to add a command would be to add a file or folder to discord_commands.
+The current way to add a command would be to add a folder to discord_commands and in that folder add an __init__.py and then the file that holds you command should be named <yourcommand>_command.py.
 
-Make sure your command extends `BaseCommand` defined in command.py as that class takes care of parsing options and arguments
+Make sure your command extends `BaseCommand` defined in command.py as that class takes care of parsing options and arguments and also sets the self._command attribute to the string you want to call your comand (i.e. !dankmemes)
 
 Implement the `run` and static 'help' method on your command and have it return the string for the message that will be sent and the help text to be displayed when !help is called.
 
-Import your command into all_commands.py and add an entry in the commands dictionary with your command as the key and your class name as the value.
+Run `python3 discord_bot.py -u` to build a new all_commands.py file which houses all possible commands that can be run. Then run discord_bot.py and your new command will be included.
