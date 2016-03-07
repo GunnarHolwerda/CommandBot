@@ -11,22 +11,7 @@ import user
 import os
 from command_dispatcher import run_command
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Discord Bot")
-    parser.add_argument('-u', '--update-commands', dest='update_commands',
-                        action='store_true',
-                        help='Updates all_commands.py file to include any' +
-                        ' new commands added to discord_commands directory')
-    args = parser.parse_args()
-
-    if args.update_commands:
-        os.system('/usr/bin/python3 scripts/update_all_commands.py')
-        exit()
-
-    # Start the bot
-    client = discord.Client()
-    client.run(user.email, user.password)
-
+client = discord.Client()
 
 @client.event
 @asyncio.coroutine
@@ -49,7 +34,24 @@ def on_message(message):
         @param: message, message object that contains information about the msg
     """
     msg = message.content
-    new_msg = run_command(msg)
+    msgs = run_command(msg)
 
-    if new_msg:
-        yield from client.send_message(message.channel, new_msg)
+    if msgs:
+        for msg in msgs:
+            yield from client.send_message(message.channel, msg)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Discord Bot")
+    parser.add_argument('-u', '--update-commands', dest='update_commands',
+                        action='store_true',
+                        help='Updates all_commands.py file to include any' +
+                        ' new commands added to discord_commands directory')
+    args = parser.parse_args()
+
+    if args.update_commands:
+        os.system('/usr/bin/python3 scripts/update_all_commands.py')
+        exit()
+
+    # Start the bot
+    print("Starting DiscordBot")
+    client.run(user.email, user.password)

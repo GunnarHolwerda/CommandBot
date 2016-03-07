@@ -4,6 +4,7 @@
 
 from ..command import BaseCommand
 
+
 class DankMemesCommand(BaseCommand):
     """
         Returns a string like so with input: yolo
