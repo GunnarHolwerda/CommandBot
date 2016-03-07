@@ -12,7 +12,11 @@ cmd_file_pattern = re.compile(r'\w*_command\.py')
 
 
 def get_all_command_files():
-    """Gets all files matching the cmd_file_pattern"""
+    """
+        Gets all files matching the cmd_file_pattern
+
+        :return: list
+    """
     result = []
     for root, _, files in os.walk("discord_commands/"):
         # Skip __pycache__ folders
@@ -28,11 +32,11 @@ def get_all_command_files():
 
 def build_all_commands(files):
     """
-    Builds a dictionary of all of the commands
+        Builds a dictionary of all of the commands
 
-    :param files: list
+        :param files: list
 
-    :return: dictionary of command to class name for the command
+        :return: dictionary of command to class name for the command
     """
 
     cmd_pattern = re.compile(r'self\._command = \"(![a-zA-Z0-9]*)\"')
@@ -65,10 +69,10 @@ def build_all_commands(files):
 
 def write_new_all_commands(cmd_dict, files):
     """
-    Writes a new all_commands.py using the commands given in cmd_dict
+        Writes a new all_commands.py using the commands given in cmd_dict
 
-    :param cmd_dict: dict
-    :param files: list
+        :param cmd_dict: dict
+        :param files: list
     """
     fo = open('discord_commands/all_commands.py', 'w')
     fo.write('"""\n\tHouses a dictionary holding references to every command' +
@@ -76,13 +80,9 @@ def write_new_all_commands(cmd_dict, files):
 
     # Generate import lines
     for f in files:
-        from_string = "from ."
         import_string = " import "
-        modules = f.replace('discord_commands/', '')
-        modules = modules.replace('.py', '')
-        module = modules.split('/')[0]
-        from_string += module
-        
+        from_string = __generate_from_string(f)
+
         for value in cmd_dict.values():
             if value['file'] == f:
                 import_string += value['class']
@@ -94,6 +94,18 @@ def write_new_all_commands(cmd_dict, files):
         print("Inserting entry for {}".format(command))
         fo.write("\t'{0}': {1},\n".format(command, value['class']))
     fo.write("}\n")
+
+def __generate_from_string(module_file):
+    """
+        Generates the "from <module_name>" part of the import
+
+        :param module_file: str
+    """
+    module = module_file.replace('discord_commands/', '')
+    module = module.replace('.py', '')
+    module = module.split('/')[0]
+
+    return "from ." + module
 
 
 if __name__ == "__main__":
