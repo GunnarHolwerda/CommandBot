@@ -12,11 +12,11 @@ from .help_command import HelpCommand
 
 
 commands = {
-	'!help': HelpCommand,
-	'!ncaam': NCAAMCommand,
-	'!dankmemes': DankMemesCommand,
-	'!cowsay': CowSayCommand,
-	'!song': SpotifySearchCommand,
-	'!butt': ButtCommand,
-	'!nba': NBACommand,
+    '!help': HelpCommand,
+    '!ncaam': NCAAMCommand,
+    '!dankmemes': DankMemesCommand,
+    '!cowsay': CowSayCommand,
+    '!song': SpotifySearchCommand,
+    '!butt': ButtCommand,
+    '!nba': NBACommand,
 }

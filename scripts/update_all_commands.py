@@ -92,7 +92,7 @@ def write_new_all_commands(cmd_dict, files):
     fo.write("\n\ncommands = {\n")
     for command, value in cmd_dict.items():
         print("Inserting entry for {}".format(command))
-        fo.write("\t'{0}': {1},\n".format(command, value['class']))
+        fo.write("    '{0}': {1},\n".format(command, value['class']))
     fo.write("}\n")
 
 def __generate_from_string(module_file):
