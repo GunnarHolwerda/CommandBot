@@ -25,6 +25,7 @@ if __name__ == "__main__":
 
     # Start the bot
     client = discord.Client()
+    client.run(user.email, user.password)
 
 
 @client.event
@@ -52,5 +53,3 @@ def on_message(message):
 
     if new_msg:
         yield from client.send_message(message.channel, new_msg)
-
-client.run(user.email, user.password)

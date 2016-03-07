@@ -80,13 +80,9 @@ def write_new_all_commands(cmd_dict, files):
         import_string = " import "
         modules = f.replace('discord_commands/', '')
         modules = modules.replace('.py', '')
-        modules = modules.split('/')
-
-        for module in modules:
-            from_string += module + "."
-
-        # Remove the trailing period
-        from_string = from_string[:-1]
+        module = modules.split('/')[0]
+        from_string += module
+        
         for value in cmd_dict.values():
             if value['file'] == f:
                 import_string += value['class']
