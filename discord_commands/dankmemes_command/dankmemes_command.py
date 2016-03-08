@@ -17,7 +17,7 @@ class DankMemesCommand(BaseCommand):
             A string or sentence
 
         Supported options:
-            $space=true
+            $space=value - Boolean [default=False], adds spaces between letters
     """
 
     def __init__(self, command_str):
@@ -26,7 +26,7 @@ class DankMemesCommand(BaseCommand):
 
     def run(self):
         sentence = self._command_str.upper()
-        if 'space' in self._opts and self._opts['space'] == "true":
+        if 'space' in self._opts and self._opts['space']:
             sentence = self.__space_string(sentence)
 
         corner_text = sentence + "\n"

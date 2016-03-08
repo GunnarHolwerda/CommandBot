@@ -9,8 +9,17 @@ import asyncio
 import discord
 import user
 import os
-from command_dispatcher import run_command
+from command_dispatcher import run_command, run_startup
 
+# ArgParse
+parser = argparse.ArgumentParser(description="Discord Bot")
+parser.add_argument('-u', '--update-commands', dest='update_commands',
+                    action='store_true',
+                    help='Updates all_commands.py file to include any' +
+                    ' new commands added to discord_commands directory')
+parser.add_argument('-s', '--fresh-start', dest='fresh_start',
+                    action='store_true', help='Starts the bot without using startup.py')
+args = parser.parse_args()
 client = discord.Client()
 
 @client.event
@@ -23,6 +32,9 @@ def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('-------------')
+
+    if not args.fresh_start:
+        run_startup()
 
 
 @client.event
@@ -41,13 +53,6 @@ def on_message(message):
             yield from client.send_message(message.channel, msg)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Discord Bot")
-    parser.add_argument('-u', '--update-commands', dest='update_commands',
-                        action='store_true',
-                        help='Updates all_commands.py file to include any' +
-                        ' new commands added to discord_commands directory')
-    args = parser.parse_args()
-
     if args.update_commands:
         os.system('/usr/bin/python3 scripts/update_all_commands.py')
         exit()

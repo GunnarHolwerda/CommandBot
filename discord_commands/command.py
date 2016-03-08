@@ -10,8 +10,11 @@ class BaseCommand:
         Abstract class for a Command
     """
 
+    freeze_writing = False
+
     def __init__(self, command_str):
         self._command = ""
+        self._full_command_str = command_str
         self._command_str = self.__strip_options(command_str)
         self._opts = self.__parse_options(command_str)
         self._args = self.__parse_args(command_str)
@@ -34,7 +37,8 @@ class BaseCommand:
 
         return date_string
 
-    def __parse_args(self, command_str):
+    @staticmethod
+    def __parse_args(command_str):
         """
             Strips all arguments from a command string and returns them as a dict
 
@@ -59,8 +63,8 @@ class BaseCommand:
 
         return args
 
-
-    def __parse_options(self, command_str):
+    @staticmethod
+    def __parse_options(command_str):
         """
             Strips all options from a command string and returns them as a dict
 
@@ -80,11 +84,15 @@ class BaseCommand:
                 opt = match.group(1)
                 value = match.group(2)
 
+                if value == "True" or value == "False":
+                    value = bool(value)
+
                 options[opt] = value
 
         return options
 
-    def __strip_options(self, msg):
+    @staticmethod
+    def __strip_options(msg):
         """
             Strips the options off of the end of the command_str
 
@@ -96,7 +104,8 @@ class BaseCommand:
         else:
             return msg[:index]
 
-    def code_wrap(self, string):
+    @staticmethod
+    def code_wrap(string):
         """
             Returns string wrapped in triple back ticks to create code
             formatting in discord
@@ -107,16 +116,41 @@ class BaseCommand:
         """
         return '```' + string + '```'
 
-    # Abstract Methods
-    def run(self):
-        """
-            Command to be overwritten that will run the command
-        """
-        raise NotImplementedError()
-
     @staticmethod
     def help():
         """
             Command to be overwritten that will display help
         """
         raise NotImplementedError()
+
+    def write_to_startup(self):
+        """	Writes out the command to startup.py to persist the setting across restart """
+
+        # Disable writing out to startup file
+        if BaseCommand.freeze_writing:
+            return
+
+        base_run_command_str = '    run_command(\"{}{}{}\")\n'
+
+        args = ''.join(' ' + str(arg) for arg in self._args) if self._args else ''
+        opts = ''.join(
+            ' ${}={}'.format(opt, value) for opt, value in self._opts.items()
+        ).strip() if self._opts else ''
+
+        file_handle = open('startup.py', 'a')
+        file_handle.write(base_run_command_str.format(self._command, args, opts))
+        file_handle.close()
+
+    # Abstract Methods
+    def run(self):
+        """ Command to be overwritten that will run the command """
+        raise NotImplementedError()
+
+    # Methods that can be overwritten
+    def validate(self):
+        """
+            Validates the command
+
+            :return: bool, str
+        """
+        return True, "OK"

@@ -95,6 +95,7 @@ def write_new_all_commands(cmd_dict, files):
         print("Inserting entry for {}".format(command))
         fo.write("    '{0}': {1},\n".format(command, value['class']))
     fo.write("}\n")
+    fo.close()
 
 def __generate_from_string(module_file):
     """

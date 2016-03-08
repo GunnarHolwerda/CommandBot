@@ -5,7 +5,17 @@
 from discord_commands.command import BaseCommand
 from discord_commands.all_commands import commands
 
-def run_command(msg_content):
+def run_startup():
+    """
+    	This method is called at startup and calls the startup function from startup.py
+        which will initialize any persisting commands
+    """
+    from startup import startup
+    BaseCommand.freeze_writing = True
+    startup()
+    BaseCommand.freeze_writing = False
+
+def run_command(msg_content, fresh_start=False):
     """
         Command dispatcher for running commands
 
@@ -18,7 +28,9 @@ def run_command(msg_content):
 
     if command in commands.keys():
         obj = commands[command](command_str)
-        result = obj.run()
+        valid, error = obj.validate()
+        result = obj.run() if valid else error
+
     elif command == "!code":
         result = BaseCommand(command_str).code_wrap(command_str)
     else:

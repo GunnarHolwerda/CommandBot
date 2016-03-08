@@ -97,8 +97,9 @@ class NCAAMCommand(BaseCommand, SportCommand):
                     ** All conferences supported, but not listed here
         """
 
-    def __parse_conference_option(self, conference):
+    @classmethod
+    def __parse_conference_option(cls, conference):
         """
             Based on conference option returns part of url needed
         """
-        return "group/" + str(NCAAMCommand.conferences[conference]) + "/"
+        return "group/" + str(cls.conferences[conference]) + "/"
