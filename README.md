@@ -126,23 +126,36 @@ T
 ##### Description
 *   Prints out help text for a specified command
 
+`!alias <command> <alias>`
+##### Arguments
+*   command, command (i.e. !dankmemes) to set the alias for
+*   alias, the alias to set for the command
+
+##### Options
+*   $persist, boolean (True or False) if set to False will not save the alias to be created when the bot restarts, defaults to True
+
+##### Description
+*   Creates an alias for an existing command
+
 # Notes
 I work on this in my free time and would love to hear suggestions you have for other commands you would like.
 
 ## My short list of things todo include:
 *   Create NCAACommand to have a NCAAMCommand extend from so that I can include the conference information in other college athletic commands that I may add
 *   Delete the command message that has been sent
-*   Add ability for commands to have a short option (i.e. !dankmemes could also be used as !dank or !d, etc)
-*   Create a refresh script that will parse all commands in discord_commands and build all_commands.py from that, so that any new command added, doesn't need to be manually added.
 
 
 # Development
 If you would like to help develop for this project feel free!
 
-The current way to add a command would be to add a file or folder to discord_commands.
+#### How to add a command
+1. Create a folder in discord_commands.
+2. In the folder place an `__init__.py` and
+`<your_command>_command.py`.  
+3. Create a class in `<your_command>_command.py` that extends BaseCommand  
+4. Implement the `run`, `help`, and `validate` functions from BaseCommand (You can skip validate if no validation needs to be done)  
+5. In your `__init__.py` include a line:  
+`from .<your_command>_command import <CommmandClassName>`
+6. Run `$ ./discord_bot.py -u` to include your command in the known commands list
 
-Make sure your command extends `BaseCommand` defined in command.py as that class takes care of parsing options and arguments
-
-Implement the `run` and static 'help' method on your command and have it return the string for the message that will be sent and the help text to be displayed when !help is called.
-
-Run `./discord_bot.py -u` to auto generate a new all_commands.py file which will allow you to run your command after starting the bot again.
+If you want your command to persist across restarts of the Bot, you will call `self._write_to_startup()`, this will write out the function as it was called to `startup.py` which is ran every time the bot is run
