@@ -13,7 +13,7 @@ class CowSayCommand(BaseCommand, CommandLineCommand):
             A str or sentence (SENTENCE MUST BE WRAPPED IN QUOTES)
 
         Options Supported:
-            $fortune=True, The cow will say your fortune
+            $fortune=True, The cow will say your fortune, no args can be passed with this option
     """
 
     def __init__(self, command_str):
@@ -22,6 +22,10 @@ class CowSayCommand(BaseCommand, CommandLineCommand):
         self._cmd_line_command = "cowsay {}".format(self._command_str)
 
     def validate(self):
+        if 'fortune' in self._opts and self._opts['fortune']:
+            if len(self._args) != 0:
+                return False, "No arguments can be used with the $fortune option"
+
         return self._command_line_validate()
 
     def run(self):
