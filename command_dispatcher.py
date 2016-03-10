@@ -15,7 +15,7 @@ def run_startup():
     startup()
     BaseCommand.freeze_writing = False
 
-def run_command(msg_content, fresh_start=False):
+def run_command(msg_content):
     """
         Command dispatcher for running commands
 
@@ -27,16 +27,37 @@ def run_command(msg_content, fresh_start=False):
     command_str = get_command_str(msg_content)
 
     if command in commands.keys():
-        obj = commands[command](command_str)
+        obj = get_command_object(command, command_str)
         valid, error = obj.validate()
         result = obj.run() if valid else error
-
     elif command == "!code":
         result = BaseCommand(command_str).code_wrap(command_str)
     else:
         return None
 
     return break_into_messages(result)
+
+def get_command_object(command, command_str):
+    """
+        Returns the object for the command being called format
+
+        :param command: str
+        :param command_str: str
+
+        :return BaseCommand
+    """
+    # If the command is a dictionary it was added as an alias
+    if isinstance(commands[command], dict):
+        # Expand argument list into the command str
+        for arg in commands[command]['args']:
+            command_str += " " + arg
+        # Parse option dictionary and add the options to the command
+        for opt, value in commands[command]['opts'].items():
+            command_str += " $" + opt + "=" + str(value)
+
+        return commands[command]['class'](command_str)
+    else:
+        return commands[command](command_str)
 
 def break_into_messages(full_msg):
     """

@@ -19,21 +19,22 @@ class BaseCommand:
         self._opts = self.__parse_options(command_str)
         self._args = self.__parse_args(command_str)
 
-    def _parse_date_option(self):
+    def _parse_date_option(self, return_format="%Y%m%d"):
         """
-            Parses the date option and returns the date_string to be used by
-            ESPN urls
+            Parses the date option and returns a date represented as a date
 
-            @param: args, dictionary of arguments and options
+            :param: args, dictionary of arguments and options
 
-            @return: date_string, string date in %Y%m%d format
+            :param return_format: str, the date format
+
+            :return: date_string, string date in %Y%m%d format by default
         """
         if self._opts and 'date' in self._opts:
             date_obj = datetime.strptime(self._opts['date'], "%m/%d/%Y")
-            date_string = date_obj.strftime("%Y%m%d")
+            date_string = date_obj.strftime(return_format)
         else:
             date_obj = datetime.now()
-            date_string = date_obj.strftime("%Y%m%d")
+            date_string = date_obj.strftime(return_format)
 
         return date_string
 
@@ -44,11 +45,11 @@ class BaseCommand:
 
             Arguments are required for a command
 
-            @param: command, the string returned from strip_command_string
+            :param: command, the string returned from strip_command_string
 
-            @return: dict of arguments passed to command
+            :return: dict of arguments passed to command
         """
-        args = ()
+        args = []
 
         option_start_index = command_str.find('$') - 1
         if option_start_index >= -1:
@@ -123,23 +124,35 @@ class BaseCommand:
         """
         raise NotImplementedError()
 
-    def write_to_startup(self):
+    def _write_to_startup(self, command_str=None):
         """	Writes out the command to startup.py to persist the setting across restart """
 
         # Disable writing out to startup file
         if BaseCommand.freeze_writing:
             return
 
-        base_run_command_str = '    run_command(\"{}{}{}\")\n'
+        if command_str:
+            self.__append_to_startup(command_str)
+        else:
+            args = ''.join(' ' + str(arg) for arg in self._args) if self._args else ''
+            opts = ''.join(
+                ' ${}={}'.format(opt, value) for opt, value in self._opts.items()
+            ).strip() if self._opts else ''
 
-        args = ''.join(' ' + str(arg) for arg in self._args) if self._args else ''
-        opts = ''.join(
-            ' ${}={}'.format(opt, value) for opt, value in self._opts.items()
-        ).strip() if self._opts else ''
+            self.__append_to_startup(self._command + args + opts)
 
+
+    def __append_to_startup(self, command):
+        """
+            Adds a run_command line to startup.py startup method
+
+            :param command: command
+        """
+        run_command_str = '    run_command(\"{}\")\n'
         file_handle = open('startup.py', 'a')
-        file_handle.write(base_run_command_str.format(self._command, args, opts))
+        file_handle.write(run_command_str.format(command))
         file_handle.close()
+
 
     # Abstract Methods
     def run(self):

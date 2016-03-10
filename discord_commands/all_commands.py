@@ -4,19 +4,23 @@
 """
 from .sports_commands import NCAAMCommand
 from .sports_commands import NBACommand
-from .cowsay_command import CowSayCommand
 from .dankmemes_command import DankMemesCommand
 from .spotify_commands import SpotifySearchCommand
 from .butts_command import ButtCommand
+from .command_line_commands import CowSayCommand
+from .command_line_commands import FortuneCommand
 from .help_command import HelpCommand
+from .alias_command import AliasCommand
 
 
 commands = {
-    '!help': HelpCommand,
     '!ncaam': NCAAMCommand,
-    '!dankmemes': DankMemesCommand,
+    '!alias': AliasCommand,
+    '!help': HelpCommand,
     '!cowsay': CowSayCommand,
-    '!song': SpotifySearchCommand,
     '!butt': ButtCommand,
     '!nba': NBACommand,
+    '!fortune': FortuneCommand,
+    '!dankmemes': DankMemesCommand,
+    '!song': SpotifySearchCommand,
 }
