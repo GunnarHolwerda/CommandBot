@@ -3,3 +3,4 @@
 """
 
 from .cowsay_command import CowSayCommand
+from .fortune_command import FortuneCommand
