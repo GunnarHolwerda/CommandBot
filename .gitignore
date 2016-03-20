@@ -6,3 +6,6 @@ temp.json
 
 # Ignore .idea folder from PyCharm
 .idea/
+
+# Ignore __pycache__
+__pycache__/

@@ -9,15 +9,15 @@ class AliasCommand(BaseCommand):
     	Creates an alias to a command, essentially renaming the command string
 
         Required arguments:
-            first: command - the command to create the alias for
-            second: alias - The new alias for the command
+            first: alias - the command to create the alias for
+            second: command - The new alias for the command
 
         Supported options:
             $persist=value - boolean true or false if you want alias to persist across restart.
                              default is True
 
         Example usage:
-        !alias !dankmemes !d
+        !alias !d !dankmemes
     """
 
     def __init__(self, command_str):
