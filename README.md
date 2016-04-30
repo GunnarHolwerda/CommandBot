@@ -1,34 +1,9 @@
-# PyDiscordClient
-A Python3.4 program that can be run in the background to add additional commands to your Discord Server.
+# Discord CommandBot
+This is a Discord bot that can be [added to your server](https://discordapp.com/oauth2/authorize?&client_id=175838908830056450&scope=bot&permissions=4000).
 
-# Setup
-Make sure you are using Python 3.4 when installing packages and running commands.
+This bot provides many different commands to enhance your Discord Guild.
 
-#### Install all required packages using pip from `requirements.txt`
-
-`$ pip3 install /path/to/requirements.txt`
-
-#### Edit user.py
-
-Edit `user.py` to include your username and password for your Discord Account. Feel free to create a new account and put their credentials in the file, just make sure they have accepted an invite to your server.
-
-#### Run the client
-To run the client:
-`$ python3 custom_discord.py`
-
-Or you can make custom_discord.py executable and run it that way too.
-
-If you want the command to run in the background and be able to close the terminal window you run it in:
-
-`$ chmod +x /path/to/custom_discord.py`
-
-`$ nohup ./custom_discord.py &`
-
-In order to kill the command after running it with nohup, use `$ ps -ef | grep python3` to find the process id of the program and then kill it using `kill -9 <pid>`.
-
-NOTE: All commands here are given to be run on a linux system.
-
-# Supported Commands
+## Supported Commands
 Arguments are required text for the Commands
 Options are optional and passed in via the format:
 `$option=value`
@@ -136,6 +111,37 @@ T
 
 ##### Description
 *   Creates an alias for an existing command
+
+
+
+
+
+# Setup
+Make sure you are using Python 3.4 when installing packages and running commands.
+
+#### Install all required packages using pip from `requirements.txt`
+
+`$ pip3 install /path/to/requirements.txt`
+
+#### Edit user.py
+
+Edit `user.py` to include your username and password for your Discord Account. Feel free to create a new account and put their credentials in the file, just make sure they have accepted an invite to your server.
+
+#### Run the client
+To run the client:
+`$ python3 custom_discord.py`
+
+Or you can make custom_discord.py executable and run it that way too.
+
+If you want the command to run in the background and be able to close the terminal window you run it in:
+
+`$ chmod +x /path/to/custom_discord.py`
+
+`$ nohup ./custom_discord.py &`
+
+In order to kill the command after running it with nohup, use `$ ps -ef | grep python3` to find the process id of the program and then kill it using `kill -9 <pid>`.
+
+NOTE: All commands here are given to be run on a linux system.
 
 # Notes
 I work on this in my free time and would love to hear suggestions you have for other commands you would like.

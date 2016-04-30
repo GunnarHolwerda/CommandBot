@@ -7,8 +7,9 @@
 import argparse
 import asyncio
 import discord
-import user
+import bot
 import os
+import logging
 from command_dispatcher import run_command, run_startup
 
 # ArgParse
@@ -21,6 +22,13 @@ parser.add_argument('-s', '--fresh-start', dest='fresh_start',
                     action='store_true', help='Starts the bot without using startup.py')
 args = parser.parse_args()
 client = discord.Client()
+
+# Setup logging
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='/tmp/log/discord/discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 @client.event
 @asyncio.coroutine
@@ -52,6 +60,7 @@ def on_message(message):
         for msg in msgs:
             yield from client.send_message(message.channel, msg)
 
+
 if __name__ == "__main__":
     if args.update_commands:
         os.system('/usr/bin/python3 scripts/update_all_commands.py')
@@ -59,4 +68,4 @@ if __name__ == "__main__":
 
     # Start the bot
     print("Starting DiscordBot")
-    client.run(user.email, user.password)
+    client.run(bot.token)
