@@ -117,13 +117,6 @@ class BaseCommand:
         """
         return '```' + string + '```'
 
-    @staticmethod
-    def help():
-        """
-            Command to be overwritten that will display help
-        """
-        raise NotImplementedError()
-
     def _write_to_startup(self, command_str=None):
         """	Writes out the command to startup.py to persist the setting across restart """
 
@@ -141,7 +134,6 @@ class BaseCommand:
 
             self.__append_to_startup(self._command + args + opts)
 
-
     def __append_to_startup(self, command):
         """
             Adds a run_command line to startup.py startup method
@@ -153,7 +145,6 @@ class BaseCommand:
         file_handle.write(run_command_str.format(command))
         file_handle.close()
 
-
     # Abstract Methods
     def run(self):
         """ Command to be overwritten that will run the command """
@@ -162,8 +153,24 @@ class BaseCommand:
     # Methods that can be overwritten
     def validate(self):
         """
-            Validates the command
+            Validates the command, return True, "OK" on success and False, error_msg on failure
 
             :return: bool, str
         """
         return True, "OK"
+
+    @staticmethod
+    def info():
+        """
+            Spits out a sentence of info for the command to be used for help
+            @return: A str of return help
+            @rtype: str
+        """
+        return "No info provided"
+
+    @staticmethod
+    def help():
+        """
+            Command to be overwritten that will display help
+        """
+        raise NotImplementedError()

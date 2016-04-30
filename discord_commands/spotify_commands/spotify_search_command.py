@@ -5,6 +5,7 @@
 from .spotify_command import SpotifyCommand
 from discord_commands.command import BaseCommand
 
+
 class SpotifySearchCommand(SpotifyCommand, BaseCommand):
     """
         Searches Spotify for a value and returns a link to the first result
@@ -21,20 +22,21 @@ class SpotifySearchCommand(SpotifyCommand, BaseCommand):
     def __init__(self, command_str):
         super(SpotifySearchCommand, self).__init__(command_str)
         self._command = "!song"
+        self._search_type = "track"
 
-    def run(self):
+    def validate(self):
         if 'type' in self._opts:
             if self._opts['type'] in SpotifySearchCommand.SUPPORTED_SEARCH_TYPES:
-                search_type = self._opts['type']
+                self._search_type = self._opts['type']
             else:
-                return "Unknown type specified\n" + self.help()
-        else:
-            search_type = 'track'
+                return False, "Unknown search type specified {}. " \
+                              "Known types: track (default), artist, album, playlist.".format(self._opts['type'])
 
+    def run(self):
         query = self._command_str
 
-        results = self._spotify.search(query, limit=1, type=search_type)
-        items = results[search_type + "s"]['items']
+        results = self._spotify.search(query, limit=1, type=self._search_type)
+        items = results[self._search_type + "s"]['items']
         if len(items) > 0:
             item = items[0]
             url = item['external_urls']['spotify']
@@ -46,11 +48,15 @@ class SpotifySearchCommand(SpotifyCommand, BaseCommand):
     @staticmethod
     def help():
         return """
-            Searches Spotify for a value and returns a link to the first result
+        Searches Spotify for a value and returns a link to the first result
 
-            Required arguments:
-                String to search for (track name)
+        Required arguments:
+            String to search for (track name)
 
-            Supported options:
-                $type=value (Type of search: artist, track, album, playlist)
+        Supported options:
+            $type=value (Type of search: artist, track, album, playlist)
         """
+
+    @staticmethod
+    def info():
+        return "Searches Spotify for the song and returns a link to the song"

@@ -39,3 +39,7 @@ class FortuneCommand(BaseCommand, CommandLineCommand):
             Options Supported:
                 None
         """
+
+    @staticmethod
+    def info():
+        return "Sends a message including a fortune"

@@ -46,3 +46,7 @@ class CowSayCommand(BaseCommand, CommandLineCommand):
             Options Supported:
                 $fortune=True, The cow will say your fortune
         """
+
+    @staticmethod
+    def info():
+        return "Will send a message of a cow speaking the words provided it"

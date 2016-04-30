@@ -5,6 +5,7 @@
 import random
 from ..command import BaseCommand
 
+
 class ReplaceCommand(BaseCommand):
     """
         Returns a the message with specific words replaced with butts.
@@ -31,6 +32,10 @@ class ReplaceCommand(BaseCommand):
             return self.__chosen_replace()
         else:
             return self.__random_replace()
+
+    @staticmethod
+    def info():
+        return "Replaces random words withing a string with the word " + ReplaceCommand.BUTT_REPLACE_STRING
 
     @staticmethod
     def help():

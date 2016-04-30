@@ -27,7 +27,7 @@ class DankMemesCommand(BaseCommand):
     def run(self):
         sentence = self._command_str.upper()
         if 'space' in self._opts and self._opts['space']:
-            sentence = self.__space_string(sentence)
+            sentence = DankMemesCommand.__space_string(sentence)
 
         corner_text = sentence + "\n"
         skip_first = True
@@ -55,7 +55,12 @@ class DankMemesCommand(BaseCommand):
                 $space=true (Places spaces between each character)
         """
 
-    def __space_string(self, str_value):
+    @staticmethod
+    def info():
+        return "Prints the word given to it vertically and horizontally starting in the upper left"
+
+    @staticmethod
+    def __space_string(str_value):
         """
             Adds spaces between each character in the strings
             @param: str_value, the string to add the spaces too

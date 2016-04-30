@@ -97,6 +97,10 @@ class NCAAMCommand(BaseCommand, SportCommand):
                     ** All conferences supported, but not listed here
         """
 
+    @staticmethod
+    def info():
+        return "Sends message with NCAAM scores for the date and conference specified (default today and top 25"
+
     @classmethod
     def __parse_conference_option(cls, conference):
         """

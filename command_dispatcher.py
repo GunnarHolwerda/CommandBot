@@ -5,15 +5,17 @@
 from discord_commands.command import BaseCommand
 from discord_commands.all_commands import commands
 
+
 def run_startup():
     """
-    	This method is called at startup and calls the startup function from startup.py
+        This method is called at startup and calls the startup function from startup.py
         which will initialize any persisting commands
     """
     from startup import startup
     BaseCommand.freeze_writing = True
     startup()
     BaseCommand.freeze_writing = False
+
 
 def run_command(msg_content):
     """
@@ -37,6 +39,7 @@ def run_command(msg_content):
 
     return break_into_messages(result)
 
+
 def get_command_object(command, command_str):
     """
         Returns the object for the command being called format
@@ -59,11 +62,12 @@ def get_command_object(command, command_str):
     else:
         return commands[command](command_str)
 
+
 def break_into_messages(full_msg):
     """
-    	Breaks the message into a list of 2000 character strings
+        Breaks the message into a list of 2000 character strings
 
-    	:param full_msg: str
+        :param full_msg: str
     """
     if len(full_msg) < 2000:
         return [full_msg]
@@ -75,21 +79,22 @@ def break_into_messages(full_msg):
 
         return msg_list
 
+
 def get_command_str(msg_content):
     """
         Strips off the command and space from the front of the message content
 
-        :param: command, the command string without a space to be stripped
-        :param: msg_content, the full message to strip the command from
+        :param msg_content: str, the full message to strip the command from
 
         :return: returns the message content - command string
     """
     return " ".join(msg_content.split()[1:])
 
+
 def get_command(msg_content):
     """
         Strips off the command from the front end of the message
 
-        :param: msg_content, the whole message to get the command from
+        :param msg_content: str, the whole message to get the command from
     """
     return msg_content.split()[0]

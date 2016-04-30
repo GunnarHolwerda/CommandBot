@@ -18,8 +18,6 @@ class NBACommand(SportCommand, BaseCommand):
         self._espn_url = "http://espn.go.com/nba/scoreboard/_/"
         self._command = "!nba"
 
-
-
     def run(self):
         date_string = super(NBACommand, self)._parse_date_option()
         date_url = "date/{}".format(date_string)
@@ -41,6 +39,10 @@ class NBACommand(SportCommand, BaseCommand):
             Supported options:
                 $date=value (value must follow %m/%d/%Y format)
         """
+
+    @staticmethod
+    def info():
+        return "Returns NBA scores for a specific date (default is today)"
 
     @staticmethod
     def __add_playoff_data(json_data):
