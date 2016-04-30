@@ -24,12 +24,13 @@ class HelpCommand(BaseCommand):
     def run(self):
         from ..all_commands import commands
         if self._args:
-            return commands[self._args[0]].help()
+            return self.code_wrap([self._args[0]].help())
         else:
-            ret_str = "Commands: \n"
+            ret_str = "Usage: !help <command>\nPrint help information for the command specified"
+            ret_str += "\n\nAvailable Commands: \n"
             for command in commands.keys():
                 ret_str += "- " + command + "\n"
-            return ret_str
+            return self.code_wrap(ret_str)
 
     @staticmethod
     def help():
