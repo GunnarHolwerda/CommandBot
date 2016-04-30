@@ -20,15 +20,18 @@ parser.add_argument('-u', '--update-commands', dest='update_commands',
                     ' new commands added to discord_commands directory')
 parser.add_argument('-s', '--fresh-start', dest='fresh_start',
                     action='store_true', help='Starts the bot without using startup.py')
+parser.add_argument('-l', '--no-log', dest='no_log', action='store_true', help="Disables logging")
+parser.add_argument('-t', '--token', dest='token', type=str, help="Specify a specific token")
 args = parser.parse_args()
 client = discord.Client()
 
 # Setup logging
-logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='/tmp/log/discord/discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+if not args.no_log:
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.DEBUG)
+    handler = logging.FileHandler(filename='/tmp/log/discord/discord.log', encoding='utf-8', mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    logger.addHandler(handler)
 
 @client.event
 @asyncio.coroutine
@@ -68,4 +71,7 @@ if __name__ == "__main__":
 
     # Start the bot
     print("Starting DiscordBot")
-    client.run(bot.token)
+    if args.token:
+        client.run(args.token)
+    else:
+        client.run(bot.token)

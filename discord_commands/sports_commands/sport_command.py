@@ -39,7 +39,7 @@ class SportCommand:
         return json_data
 
     @staticmethod
-    def _create_scores_dict(json_data):
+    def _create_scores_dict(json_data, playoff_func=None):
         """
             Parses JSON object from ESPN to build a scores dictionary of scores for
             the day
@@ -59,6 +59,9 @@ class SportCommand:
                 'state': competition['status']['type']['name']
             }}
 
+            if playoff_func and playoff_func(competition):
+                scores[game_id]['playoffs'] = competition['series']['summary']
+
             scores[game_id]['teams'] = []
 
             for team in competition['competitors']:
@@ -68,6 +71,8 @@ class SportCommand:
                 # NCAAM has a curated rank field
                 elif 'curatedRank' in team:
                     rank = team['curatedRank']['current']
+                else:
+                    rank = 'N\\A'
 
                 team_dict = {
                     'rank': rank,
@@ -109,15 +114,19 @@ class SportCommand:
                 elif team_two['winner']:
                     team_one['abbreviation'] = team_one['abbreviation'].lower()
 
-            score_str = "{:<4} vs {:<4} ... {:<3}-{:>3} {}\n".format(team_one['abbreviation'],
-                                                                     team_two[
-                                                                         'abbreviation'],
-                                                                     team_one[
-                                                                         'score'],
-                                                                     team_two[
-                                                                         'score'],
+            score_str = "{:<4} vs {:<4} ... {:<3}-{:>3} {}".format(team_one['abbreviation'],
+                                                                     team_two['abbreviation'],
+                                                                     team_one['score'],
+                                                                     team_two['score'],
                                                                      score['status']['description'])
 
+            if 'playoffs' in score:
+                if 'Series' in score['playoffs']:
+                    score_str += " 0-0"
+                else:
+                    score_str += " {}".format(score['playoffs'])
+
+            score_str += "\n"
             if game_state == cls.ESPN_GAME_FINISHED:
                 final_scores += score_str
             elif game_state == cls.ESPN_GAME_IN_PROGRESS or game_state == cls.ESPN_GAME_HALFTIME:

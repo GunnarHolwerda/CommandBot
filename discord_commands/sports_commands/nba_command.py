@@ -25,7 +25,7 @@ class NBACommand(SportCommand, BaseCommand):
         date_url = "date/{}".format(date_string)
 
         data = super(NBACommand, self)._extract_espn_json_scoreboard_data(url_options=date_url)
-        scores = SportCommand._create_scores_dict(data)
+        scores = SportCommand._create_scores_dict(data, playoff_func=NBACommand.__add_playoff_data)
 
         msg = SportCommand._generate_score_printout(scores)
 
@@ -41,3 +41,12 @@ class NBACommand(SportCommand, BaseCommand):
             Supported options:
                 $date=value (value must follow %m/%d/%Y format)
         """
+
+    @staticmethod
+    def __add_playoff_data(json_data):
+        """
+        This method will get passed to _create_scores_dict so that playoff information can be added to the message
+        @param json_data: The json data, from root it will be json_data['events']['competitions']
+        @return: True if playoff data exists, false otherwise
+        """
+        return 'series' in json_data
