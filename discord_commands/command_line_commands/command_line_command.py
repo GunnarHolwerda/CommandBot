@@ -9,8 +9,8 @@ class CommandLineCommand:
         Abstract class for all commands that run a direct command from the command line
     """
 
-    def __init__(self, command_str):
-        super(CommandLineCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(CommandLineCommand, self).__init__(message)
         self._cmd_line_command = ""
 
     def _command_line_validate(self):

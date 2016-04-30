@@ -16,8 +16,8 @@ class CowSayCommand(BaseCommand, CommandLineCommand):
             $fortune=True, The cow will say your fortune, no args can be passed with this option
     """
 
-    def __init__(self, command_str):
-        super(CowSayCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(CowSayCommand, self).__init__(message)
         self._command = "!cowsay"
         self._cmd_line_command = "cowsay {}".format(self._command_str)
 

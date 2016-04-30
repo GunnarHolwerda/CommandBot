@@ -18,8 +18,8 @@ class HelpCommand(BaseCommand):
             None
     """
 
-    def __init__(self, command_str):
-        super(HelpCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(HelpCommand, self).__init__(message)
         self._command = "!help"
 
     def validate(self):
@@ -33,7 +33,7 @@ class HelpCommand(BaseCommand):
             ret_str = "Usage: !help <command>\nPrint help information for the command specified"
             ret_str += "\n\nAvailable Commands: \n"
             for command, obj in commands.items():
-                if type(obj) is not dict:
+                if not isinstance(obj, dict):
                     ret_str += "- " + command + " - " + obj.info() + "\n"
                 else:
                     ret_str += "- " + command + " - " + obj['class'].info() + "\n"

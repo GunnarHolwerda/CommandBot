@@ -20,8 +20,8 @@ class DankMemesCommand(BaseCommand):
             $space=value - Boolean [default=False], adds spaces between letters
     """
 
-    def __init__(self, command_str):
-        super(DankMemesCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(DankMemesCommand, self).__init__(message)
         self._command = "!dankmemes"
 
     def run(self):

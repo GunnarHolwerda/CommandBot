@@ -52,8 +52,8 @@ class NCAAMCommand(BaseCommand, SportCommand):
         'wcc': 29   # West Coast Conference
     }
 
-    def __init__(self, command_str):
-        super(NCAAMCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(NCAAMCommand, self).__init__(message)
         self._command = "!ncaam"
         self._espn_url = "http://espn.go.com/mens-college-basketball/scoreboard/_/"
 

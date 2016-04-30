@@ -10,6 +10,6 @@ class SpotifyCommand:
         Abstract class for all SpotifyCommands
     """
 
-    def __init__(self, command_str):
-        super(SpotifyCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(SpotifyCommand, self).__init__(message)
         self._spotify = spotipy.Spotify()

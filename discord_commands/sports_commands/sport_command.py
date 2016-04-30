@@ -17,8 +17,8 @@ class SportCommand:
     ESPN_GAME_HALFTIME = "STATUS_HALFTIME"
     ESPN_GAME_FINISHED = "STATUS_FINAL"
 
-    def __init__(self, command_str):
-        super(SportCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(SportCommand, self).__init__(message)
         self._espn_url = ""
 
     # SportCommand methods

@@ -4,6 +4,7 @@
 
 from discord_commands.command import BaseCommand
 
+
 class AliasCommand(BaseCommand):
     """
     	Creates an alias to a command, essentially renaming the command string
@@ -21,8 +22,8 @@ class AliasCommand(BaseCommand):
         !alias !cf !cowsay $fortune=True
     """
 
-    def __init__(self, command_str):
-        super(AliasCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(AliasCommand, self).__init__(message)
         self._command = "!alias"
 
         # Parsing the command_str to get the alias and the cmd for the alias
@@ -56,7 +57,7 @@ class AliasCommand(BaseCommand):
         commands[self._alias] = {'class': command_class, 'args': args, 'opts': opts}
 
         if 'persist' not in self._opts or self._opts['persist']:
-            self._write_to_startup(command_str=self._command + " " + self._full_command_str)
+            self._write_to_startup(command_str=self._command + " " + self._command_str_with_options)
 
         return "New alias {} -> {} created.".format(self._alias, self._aliased_command)
 
@@ -66,7 +67,7 @@ class AliasCommand(BaseCommand):
             aliased
         """
 
-        split = self._full_command_str.split(' ')
+        split = self._command_str_with_options.split(' ')
         return split[0], ' '.join(split[1:])
 
 

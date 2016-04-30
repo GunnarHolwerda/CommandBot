@@ -19,8 +19,8 @@ class SpotifySearchCommand(SpotifyCommand, BaseCommand):
 
     SUPPORTED_SEARCH_TYPES = ['artist', 'track', 'album', 'playlist']
 
-    def __init__(self, command_str):
-        super(SpotifySearchCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(SpotifySearchCommand, self).__init__(message)
         self._command = "!song"
         self._search_type = "track"
 
@@ -31,6 +31,7 @@ class SpotifySearchCommand(SpotifyCommand, BaseCommand):
             else:
                 return False, "Unknown search type specified {}. " \
                               "Known types: track (default), artist, album, playlist.".format(self._opts['type'])
+        return True, "OK"
 
     def run(self):
         query = self._command_str

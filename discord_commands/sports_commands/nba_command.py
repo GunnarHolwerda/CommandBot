@@ -13,8 +13,8 @@ class NBACommand(SportCommand, BaseCommand):
         Supported options:
             $date=value (value must follow %m/%d/%Y format)
     """
-    def __init__(self, command_str):
-        super(NBACommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(NBACommand, self).__init__(message)
         self._espn_url = "http://espn.go.com/nba/scoreboard/_/"
         self._command = "!nba"
 

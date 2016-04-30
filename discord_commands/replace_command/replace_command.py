@@ -23,8 +23,8 @@ class ReplaceCommand(BaseCommand):
 
     BUTT_REPLACE_STRING = "butts"
 
-    def __init__(self, command_str):
-        super(ReplaceCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(ReplaceCommand, self).__init__(message)
         self._command = "!replace"
 
     def run(self):

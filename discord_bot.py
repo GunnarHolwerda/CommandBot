@@ -57,8 +57,7 @@ def on_message(message):
 
         @param message: str, message object that contains information about the msg
     """
-    msg = message.content
-    msgs = run_command(msg)
+    msgs = run_command(message)
 
     if msgs:
         for msg in msgs:

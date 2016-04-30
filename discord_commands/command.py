@@ -12,12 +12,18 @@ class BaseCommand:
 
     freeze_writing = False
 
-    def __init__(self, command_str):
+    def __init__(self, message):
+        """
+        Constructor for BaseCommand
+        @param message: discord.message
+        @type message: discord.Message
+        """
         self._command = ""
-        self._full_command_str = command_str
-        self._command_str = self.__strip_options(command_str)
-        self._opts = self.__parse_options(command_str)
-        self._args = self.__parse_args(command_str)
+        self._message = message
+        self._command_str_with_options = message.content
+        self._command_str = self.__strip_options(message.content)
+        self._opts = self.__parse_options(message.content)
+        self._args = self.__parse_args(message.content)
 
     def _parse_date_option(self, return_format="%Y%m%d"):
         """
@@ -38,8 +44,7 @@ class BaseCommand:
 
         return date_string
 
-    @staticmethod
-    def __parse_args(command_str):
+    def __parse_args(self, command_str):
         """
             Strips all arguments from a command string and returns them as a dict
 

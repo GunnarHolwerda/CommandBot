@@ -17,50 +17,58 @@ def run_startup():
     BaseCommand.freeze_writing = False
 
 
-def run_command(msg_content):
+def run_command(message):
     """
         Command dispatcher for running commands
 
-        :param msg_content: str, the full message from discord
+        :param message: discord.Message, the full message from discord
 
         :return: None, if command not found, else the result of the command
     """
-    command = get_command(msg_content)
-    command_str = get_command_str(msg_content)
+    command = get_command(message.content)
 
     if command in commands.keys():
-        obj = get_command_object(command, command_str)
+        obj = get_command_object(command, message)
         valid, error = obj.validate()
         result = obj.run() if valid else error
     elif command == "!code":
-        result = BaseCommand(command_str).code_wrap(command_str)
+        result = BaseCommand(message).code_wrap(message.content)
     else:
         return None
 
     return break_into_messages(result)
 
 
-def get_command_object(command, command_str):
+def get_command_object(command, message):
     """
         Returns the object for the command being called format
 
-        :param command: str
-        :param command_str: str
+        @param command: str
+        @param message: discord.Message object
+        @type message: discord.Message
 
-        :return BaseCommand
+        @return the command object
+        @rtype BaseCommand
     """
+    # Strip off the command from the message content
+    if len(message.content) > len(command):
+        message.content = message.content.replace(command + " ", "")
+    else:
+        message.content = message.content.replace(command, "")
+
     # If the command is a dictionary it was added as an alias
     if isinstance(commands[command], dict):
+        message.content = ""
         # Expand argument list into the command str
         for arg in commands[command]['args']:
-            command_str += " " + arg
+            message.content += " " + arg
         # Parse option dictionary and add the options to the command
         for opt, value in commands[command]['opts'].items():
-            command_str += " $" + opt + "=" + str(value)
+            message.content += " $" + opt + "=" + str(value)
 
-        return commands[command]['class'](command_str)
+        return commands[command]['class'](message)
     else:
-        return commands[command](command_str)
+        return commands[command](message)
 
 
 def break_into_messages(full_msg):

@@ -16,8 +16,8 @@ class FortuneCommand(BaseCommand, CommandLineCommand):
             None
     """
 
-    def __init__(self, command_str):
-        super(FortuneCommand, self).__init__(command_str)
+    def __init__(self, message):
+        super(FortuneCommand, self).__init__(message)
         self._command = "!fortune"
         self._cmd_line_command = "fortune"
 
