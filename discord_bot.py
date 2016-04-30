@@ -33,6 +33,7 @@ if not args.no_log:
     handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
     logger.addHandler(handler)
 
+
 @client.event
 @asyncio.coroutine
 def on_ready():
@@ -54,7 +55,7 @@ def on_message(message):
     """
         This message gets called everytime a message is received in Discord
 
-        @param: message, message object that contains information about the msg
+        @param message: str, message object that contains information about the msg
     """
     msg = message.content
     msgs = run_command(msg)
@@ -66,7 +67,7 @@ def on_message(message):
 
 if __name__ == "__main__":
     if args.update_commands:
-        os.system('/usr/bin/python3 scripts/update_all_commands.py')
+        os.system('python3 scripts/update_all_commands.py')
         exit()
 
     # Start the bot

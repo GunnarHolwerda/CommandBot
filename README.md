@@ -19,7 +19,7 @@ Options are optional and passed in via the format:
 ##### Description
 *   Wraps the words in \`\`\` to format the text as code
 
-`!butt <words>`
+`!replace <words>`
 ##### Arguments
 *   words, is any text
 

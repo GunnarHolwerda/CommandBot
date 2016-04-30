@@ -5,7 +5,7 @@
 import random
 from ..command import BaseCommand
 
-class ButtCommand(BaseCommand):
+class ReplaceCommand(BaseCommand):
     """
         Returns a the message with specific words replaced with butts.
         A user can choose what word to replace by preceding it with $ at the
@@ -23,8 +23,8 @@ class ButtCommand(BaseCommand):
     BUTT_REPLACE_STRING = "butts"
 
     def __init__(self, command_str):
-        super(ButtCommand, self).__init__(command_str)
-        self._command = "!butt"
+        super(ReplaceCommand, self).__init__(command_str)
+        self._command = "!replace"
 
     def run(self):
         if 'replace' in self._opts:

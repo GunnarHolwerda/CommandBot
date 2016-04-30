@@ -4,6 +4,7 @@
 
 from ..command import BaseCommand
 
+
 class HelpCommand(BaseCommand):
     """
         Displays help for a command
