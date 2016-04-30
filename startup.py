@@ -8,5 +8,5 @@ from command_dispatcher import run_command
 def startup():
     """	This method is ran when DiscordBot is started """
     print("Initializing saved commands")
-    run_command("!alias !dankmemes !d")
-    run_command("!alias !cowsay $fortune=True !cf")
+    run_command("!alias !d !dankmemes")
+    run_command("!alias !cf !cowsay $fortune=True")

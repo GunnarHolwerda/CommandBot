@@ -17,7 +17,7 @@ Options are optional and passed in via the format:
 *   None
 
 ##### Description
-*   Wraps the words in ``` to format the text as code
+*   Wraps the words in \`\`\` to format the text as code
 
 `!butt <words>`
 ##### Arguments
@@ -101,10 +101,10 @@ T
 ##### Description
 *   Prints out help text for a specified command
 
-`!alias <command> <alias>`
+`!alias <alias> <command>`
 ##### Arguments
-*   command, command (i.e. !dankmemes) to set the alias for
 *   alias, the alias to set for the command
+*   command, command (i.e. !dankmemes) to set the alias for
 
 ##### Options
 *   $persist, boolean (True or False) if set to False will not save the alias to be created when the bot restarts, defaults to True

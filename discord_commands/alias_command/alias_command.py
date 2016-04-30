@@ -9,15 +9,16 @@ class AliasCommand(BaseCommand):
     	Creates an alias to a command, essentially renaming the command string
 
         Required arguments:
-            first: command - the command to create the alias for
-            second: alias - The new alias for the command
+            first: alias - The new alias for the command
+            second: command - the command to create the alias for, can include opts and args
 
         Supported options:
-            $persist=value - boolean true or false if you want alias to persist across restart.
-                             default is True
+            $persist=value - boolean t=True or False if you want alias to persist across restart.
+                                 default is True
 
         Example usage:
-        !alias !dankmemes !d
+        !alias !d !dankmemes
+        !alias !cf !cowsay $fortune=True
     """
 
     def __init__(self, command_str):
@@ -32,8 +33,8 @@ class AliasCommand(BaseCommand):
         from discord_commands.all_commands import commands
 
         # Create the command object for the aliased command
-        command_str = self._aliased_command.replace(self._args[0] + ' ', '')
-        self._command_obj = commands[self._args[0]](command_str)
+        command_str = self._aliased_command.replace(self._args[1] + ' ', '')
+        self._command_obj = commands[self._args[1]](command_str)
 
         # Validate alias and command object could be created
         if self._command_obj and self._alias:
@@ -55,7 +56,7 @@ class AliasCommand(BaseCommand):
         commands[self._alias] = {'class': command_class, 'args': args, 'opts': opts}
 
         if 'persist' not in self._opts or self._opts['persist']:
-            self._write_to_startup(command_str=self._command + " " +  self._full_command_str)
+            self._write_to_startup(command_str=self._command + " " + self._full_command_str)
 
         return "New alias {} -> {} created.".format(self._alias, self._aliased_command)
 
@@ -64,31 +65,25 @@ class AliasCommand(BaseCommand):
             Pulls out the alias from the command_str and also the command that is going to be
             aliased
         """
-        full_args = []
-        for split in self._full_command_str.split('!'):
-            # Skip any empty list items
-            if not split:
-                continue
-            else:
-                full_args.append("!" + split)
 
-        return full_args[1], full_args[0]
+        split = self._full_command_str.split(' ')
+        return split[0], ' '.join(split[1:])
 
 
     @staticmethod
     def help():
         return """
-        	Creates an alias to a command, essentially renaming the command string
+        Creates an alias to a command, essentially renaming the command string
 
-            Required arguments:
-                first: command - the command to create the alias for, can include opts and args
-                second: alias - The new alias for the command
+        Required arguments:
+            first: command - the command to create the alias for, can include opts and args
+            second: alias - The new alias for the command
 
-            Supported options:
-                $persist=value - boolean true or false if you want alias to persist across restart.
+        Supported options:
+            $persist=value - boolean true or false if you want alias to persist across restart.
                                  default is True
 
-            Example usage:
-            !alias !dankmemes !d
-            !alias !cowsay $fortune=True !cf
+        Example usage:
+        !alias !d !dankmemes
+        !alias !cf !cowsay $fortune=True
         """
