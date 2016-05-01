@@ -121,10 +121,7 @@ class SportCommand:
                                                                      score['status']['description'])
 
             if 'playoffs' in score:
-                if 'Series' in score['playoffs']:
-                    score_str += " 0-0"
-                else:
-                    score_str += " {}".format(score['playoffs'])
+                score_str += " {}".format(score['playoffs'])
 
             score_str += "\n"
             if game_state == cls.ESPN_GAME_FINISHED:
