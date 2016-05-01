@@ -32,19 +32,28 @@ class AliasCommand(BaseCommand):
 
     def validate(self):
         from discord_commands.all_commands import commands
+        from discord import Message
 
-        # Create the command object for the aliased command
-        command_str = self._aliased_command.replace(self._args[1] + ' ', '')
-        self._command_obj = commands[self._args[1]](command_str)
+        # Check if alias already exists
+        if self._message.server.id in commands['aliases'] and \
+                        self._alias in commands['aliases'][self._message.server.id]:
+            return False, "Command already exists: {}".format(self._alias)
+        else:
+            if self._args[1] not in commands:
+                return False, "No command to be aliased to {}".format(self._args[1])
 
-        # Validate alias and command object could be created
-        if self._command_obj and self._alias:
-            if self._alias in commands:
-                return False, "Command already exists: {}".format(self._alias)
+            # Create the command object for the aliased command
+            if len(self._aliased_command) > len(self._args[1]):
+                command_str = self._aliased_command.replace(self._args[1] + ' ', '')
+            else:
+                command_str = self._aliased_command.replace(self._args[1], '')
+
+            self._command_obj = commands[self._args[1]](Message(content=command_str, server=self._message.server))
+
+            if not self._command_obj:
+                return False, "Format of command was invalid"
             else:
                 return True, "OK"
-        else:
-            return False, "Command {} not found or alias could not be parsed".format(self._args[0])
 
     def run(self):
         from discord_commands.all_commands import commands
@@ -53,11 +62,14 @@ class AliasCommand(BaseCommand):
         args = self._command_obj._args
         opts = self._command_obj._opts
 
-        # Add alias to commands dictionary
-        commands[self._alias] = {'class': command_class, 'args': args, 'opts': opts}
+        if self._message.server.id not in commands['aliases']:
+            commands['aliases'][self._message.server.id] = {}
+
+        commands['aliases'][self._message.server.id][self._alias] = {'class': command_class, 'args': args, 'opts': opts}
 
         if 'persist' not in self._opts or self._opts['persist']:
-            self._write_to_startup(command_str=self._command + " " + self._command_str_with_options)
+            self._write_to_startup(self._message.server,
+                                   command_str=self._command + " " + self._command_str_with_options)
 
         return "New alias {} -> {} created.".format(self._alias, self._aliased_command)
 

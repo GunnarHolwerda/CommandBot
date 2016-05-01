@@ -122,7 +122,7 @@ class BaseCommand:
         """
         return '```' + string + '```'
 
-    def _write_to_startup(self, command_str=None):
+    def _write_to_startup(self, server, command_str=None):
         """	Writes out the command to startup.py to persist the setting across restart """
 
         # Disable writing out to startup file
@@ -130,24 +130,24 @@ class BaseCommand:
             return
 
         if command_str:
-            self.__append_to_startup(command_str)
+            self.__append_to_startup(command_str, server)
         else:
             args = ''.join(' ' + str(arg) for arg in self._args) if self._args else ''
             opts = ''.join(
                 ' ${}={}'.format(opt, value) for opt, value in self._opts.items()
             ).strip() if self._opts else ''
 
-            self.__append_to_startup(self._command + args + opts)
+            self.__append_to_startup(self._command + args + opts, server)
 
-    def __append_to_startup(self, command):
+    def __append_to_startup(self, command, server):
         """
             Adds a run_command line to startup.py startup method
 
             :param command: command
         """
-        run_command_str = '    run_command(\"{}\")\n'
+        run_command_str = '    msg = Message(content=\"{}\")\n    msg.server = Server(id=\'{}\')\n    run_command(msg)\n'
         file_handle = open('startup.py', 'a')
-        file_handle.write(run_command_str.format(command))
+        file_handle.write(run_command_str.format(command, server.id))
         file_handle.close()
 
     # Abstract Methods

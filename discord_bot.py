@@ -66,7 +66,7 @@ def on_message(message):
 
 if __name__ == "__main__":
     if args.update_commands:
-        os.system('python3 scripts/update_all_commands.py')
+        os.system('python scripts/update_all_commands.py')
         exit()
 
     # Start the bot

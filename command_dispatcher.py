@@ -27,7 +27,7 @@ def run_command(message):
     """
     command = get_command(message.content)
 
-    if command in commands.keys():
+    if is_alias_or_command(command, message.server.id):
         obj = get_command_object(command, message)
         valid, error = obj.validate()
         result = obj.run() if valid else error
@@ -37,6 +37,16 @@ def run_command(message):
         return None
 
     return break_into_messages(result)
+
+def is_alias_or_command(command, server_id):
+    """
+
+    @param command: the command to check if exists
+    @type command: str
+    @return: True, if exists, False otherwise
+    @rtype: bool
+    """
+    return command in commands.keys() or command in commands['aliases'][server_id]
 
 
 def get_command_object(command, message):
@@ -56,17 +66,18 @@ def get_command_object(command, message):
     else:
         message.content = message.content.replace(command, "")
 
-    # If the command is a dictionary it was added as an alias
-    if isinstance(commands[command], dict):
-        message.content = ""
+    # If the command is under the aliases key it was added as an alias, make sure it belongs to the server asking
+    if 'aliases' in commands and \
+                    message.server.id in commands['aliases'] and \
+                    command in commands['aliases'][message.server.id]:
         # Expand argument list into the command str
-        for arg in commands[command]['args']:
+        for arg in commands['aliases'][message.server.id][command]['args']:
             message.content += " " + arg
         # Parse option dictionary and add the options to the command
-        for opt, value in commands[command]['opts'].items():
+        for opt, value in commands['aliases'][message.server.id][command]['opts'].items():
             message.content += " $" + opt + "=" + str(value)
 
-        return commands[command]['class'](message)
+        return commands['aliases'][message.server.id][command]['class'](message)
     else:
         return commands[command](message)
 
