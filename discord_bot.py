@@ -7,7 +7,6 @@
 import argparse
 import asyncio
 import discord
-import bot
 import os
 import logging
 from command_dispatcher import CommandDispatcher
@@ -25,6 +24,10 @@ parser.add_argument('-t', '--token', dest='token', type=str, help="Specify a spe
 args = parser.parse_args()
 client = discord.Client()
 dispatcher = CommandDispatcher() if not args.fresh_start else CommandDispatcher(fresh_start=True)
+
+if not args.token:
+    print("A token must be supplied")
+    exit()
 
 # Setup logging
 if not args.no_log:
@@ -66,7 +69,4 @@ if __name__ == "__main__":
 
     # Start the bot
     print("Starting DiscordBot")
-    if args.token:
-        client.run(args.token)
-    else:
-        client.run(bot.token)
+    client.run(args.token)
