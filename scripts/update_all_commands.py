@@ -90,7 +90,7 @@ def write_new_all_commands(cmd_dict, files):
         fo.write(from_string + import_string + "\n")
 
     # Write out command dict
-    fo.write("\n\ncommands = {\n")
+    fo.write("\n\nCOMMANDS = {\n")
     for command, value in cmd_dict.items():
         print("Inserting entry for {}".format(command))
         fo.write("    '{0}': {1},\n".format(command, value['class']))

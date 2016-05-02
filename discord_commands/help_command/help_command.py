@@ -26,13 +26,13 @@ class HelpCommand(BaseCommand):
         return True, "OK"
 
     def run(self):
-        from ..all_commands import commands
+        from ..all_commands import COMMANDS
         if self._args:
-            return self.code_wrap(commands[self._args[0]].help())
+            return self.code_wrap(COMMANDS[self._args[0]].help())
         else:
             ret_str = "Usage: !help <command>\nPrint help information for the command specified"
             ret_str += "\n\nAvailable Commands: \n"
-            for command, obj in commands.items():
+            for command, obj in COMMANDS.items():
                 if not isinstance(obj, dict):
                     ret_str += "- " + command + " - " + obj.info() + "\n"
                 else:

@@ -13,7 +13,7 @@ from .sports_commands import NCAAMCommand
 from .spotify_commands import SpotifySearchCommand
 
 
-commands = {
+COMMANDS = {
     '!ncaam': NCAAMCommand,
     '!nba': NBACommand,
     '!replace': ReplaceCommand,

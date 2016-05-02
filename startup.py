@@ -4,7 +4,7 @@
 """
 
 from command_dispatcher import run_command
-from discord import Message, Server
+from discord import Message, Server, User
 
 def startup():
     """	This method is ran when DiscordBot is started """
@@ -14,4 +14,7 @@ def startup():
     run_command(msg)
     msg = Message(content="!alias !cf !cowsay $fortune=True")
     msg.server = Server(id='108769127627280384')
+    run_command(msg)
+    msg = Message(content="!alias !cf !cowsay $fortune=True")
+    msg.author = User(id='108768204184113152')
     run_command(msg)

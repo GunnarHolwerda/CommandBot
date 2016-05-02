@@ -3,7 +3,9 @@
 """
 
 from discord_commands.command import BaseCommand
-from discord_commands.all_commands import commands
+from discord_commands.all_commands import COMMANDS
+
+ALIASES = COMMANDS['aliases']
 
 
 def run_startup():
@@ -27,7 +29,7 @@ def run_command(message):
     """
     command = get_command(message.content)
 
-    if is_alias_or_command(command, message.server.id):
+    if is_alias_or_command(command, message):
         obj = get_command_object(command, message)
         valid, error = obj.validate()
         result = obj.run() if valid else error
@@ -38,15 +40,29 @@ def run_command(message):
 
     return break_into_messages(result)
 
-def is_alias_or_command(command, server_id):
+def is_alias_or_command(command, message):
     """
 
     @param command: the command to check if exists
     @type command: str
+    @param message: the message
+    @type message: discord.Message
     @return: True, if exists, False otherwise
     @rtype: bool
     """
-    return command in commands.keys() or command in commands['aliases'][server_id]
+
+    if command in COMMANDS.keys():
+        return True
+    elif message.server and command in ALIASES[message.server.id]:
+        return True
+    elif not message.server and \
+            message.channel.is_private and \
+            message.author.id in ALIASES and\
+            command in ALIASES[message.author.id]:
+        return True
+    else:
+        return False
+
 
 
 def get_command_object(command, message):
@@ -66,21 +82,54 @@ def get_command_object(command, message):
     else:
         message.content = message.content.replace(command, "")
 
-    # If the command is under the aliases key it was added as an alias, make sure it belongs to the server asking
-    if 'aliases' in commands and \
-                    message.server.id in commands['aliases'] and \
-                    command in commands['aliases'][message.server.id]:
-        # Expand argument list into the command str
-        for arg in commands['aliases'][message.server.id][command]['args']:
-            message.content += " " + arg
-        # Parse option dictionary and add the options to the command
-        for opt, value in commands['aliases'][message.server.id][command]['opts'].items():
-            message.content += " $" + opt + "=" + str(value)
-
-        return commands['aliases'][message.server.id][command]['class'](message)
+    if command_is_server_alias(command, message.server):
+        return parse_alias_to_command(message, ALIASES[message.server.id][command])
+    elif command_is_dm_alias(command, message.author):
+        return parse_alias_to_command(message, ALIASES[message.author.id][command])
     else:
-        return commands[command](message)
+        return COMMANDS[command](message)
 
+
+def command_is_server_alias(command, server):
+    """
+    Returns True if the command is an alias for a server
+    @param command: The command
+    @type command: str
+    @param user: The Discord Server object to check the alias for
+    @type user: discord.Server
+    @return: True if the command is an alias for the server, False otherwise
+    """
+    return server and server.id in ALIASES and command in ALIASES[server.id]
+
+def command_is_dm_alias(command, user):
+    """
+    Returns True if the command is an alias for a user in their DM's with the bot
+    @param command: The command
+    @type command: str
+    @param user: The Discord User object to check the alias for
+    @type user: discord.User
+    @return: True if the command is an alias for the user, False otherwise
+    """
+    return user.id in ALIASES and command in ALIASES[user.id]
+
+def parse_alias_to_command(message, alias):
+    """
+    Will explode and alias into a full command and return the object for that command
+    @param message: The message from discord
+    @type message: discord.Message
+    @param alias: The alias to explode
+    @type alias: dict
+    @return: The BaseCommand object to be run
+    @rtype: BaseCommand
+    """
+    # Expand argument list into the command str
+    for arg in alias['args']:
+        message.content += " " + arg
+    # Parse option dictionary and add the options to the command
+    for opt, value in alias['opts'].items():
+        message.content += " $" + opt + "=" + str(value)
+
+    return alias['class'](message)
 
 def break_into_messages(full_msg):
     """

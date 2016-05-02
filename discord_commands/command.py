@@ -25,6 +25,28 @@ class BaseCommand:
         self._opts = self.__parse_options(message.content)
         self._args = self.__parse_args(message.content)
 
+    def _msg_is_dm(self):
+        """
+        Determines if the message was sent as a DM
+        @return: True if message is a dm, False otherwise
+        @rtype: bool
+        """
+        return not self._message.server
+
+    def get_msg_server(self):
+        """
+        @return: Returns the discord.Server object for the current message
+        @rtype: discord.Server
+        """
+        return self._message.server
+
+    def get_msg_author(self):
+        """
+        @return: Returns the discord.User object of the author for the current message
+        @rtype: discord.User
+        """
+        return self._message.author
+
     def _parse_date_option(self, return_format="%Y%m%d"):
         """
             Parses the date option and returns a date represented as a date
@@ -122,7 +144,7 @@ class BaseCommand:
         """
         return '```' + string + '```'
 
-    def _write_to_startup(self, server, command_str=None):
+    def _write_to_startup(self, command_str=None):
         """	Writes out the command to startup.py to persist the setting across restart """
 
         # Disable writing out to startup file
@@ -130,24 +152,30 @@ class BaseCommand:
             return
 
         if command_str:
-            self.__append_to_startup(command_str, server)
+            self.__append_to_startup(command_str)
         else:
             args = ''.join(' ' + str(arg) for arg in self._args) if self._args else ''
             opts = ''.join(
                 ' ${}={}'.format(opt, value) for opt, value in self._opts.items()
             ).strip() if self._opts else ''
 
-            self.__append_to_startup(self._command + args + opts, server)
+            self.__append_to_startup(self._command + args + opts)
 
-    def __append_to_startup(self, command, server):
+    def __append_to_startup(self, command):
         """
             Adds a run_command line to startup.py startup method
 
             :param command: command
         """
-        run_command_str = '    msg = Message(content=\"{}\")\n    msg.server = Server(id=\'{}\')\n    run_command(msg)\n'
+        if self._msg_is_dm():
+            run_command_str = '    msg = Message(content=\"{}\")\n    msg.author = User(id=\'{}\')' \
+                              '\n    run_command(msg)\n'.format(command, self.get_msg_author().id)
+        else:
+            run_command_str = '    msg = Message(content=\"{}\")\n    msg.server = Server(id=\'{}\')' \
+                              '\n    run_command(msg)\n'.format(command, self.get_msg_server().id)
+
         file_handle = open('startup.py', 'a')
-        file_handle.write(run_command_str.format(command, server.id))
+        file_handle.write(run_command_str)
         file_handle.close()
 
     # Abstract Methods
