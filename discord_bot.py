@@ -10,7 +10,7 @@ import discord
 import bot
 import os
 import logging
-from command_dispatcher import run_command, run_startup
+from command_dispatcher import CommandDispatcher
 
 # ArgParse
 parser = argparse.ArgumentParser(description="Discord Bot")
@@ -24,6 +24,7 @@ parser.add_argument('-l', '--no-log', dest='no_log', action='store_true', help="
 parser.add_argument('-t', '--token', dest='token', type=str, help="Specify a specific token")
 args = parser.parse_args()
 client = discord.Client()
+dispatcher = CommandDispatcher() if not args.fresh_start else CommandDispatcher(fresh_start=True)
 
 # Setup logging
 if not args.no_log:
@@ -40,24 +41,18 @@ def on_ready():
     """
         This functions runs when the client is logged in
     """
-    print('Logged in as ')
-    print(client.user.name)
-    print(client.user.id)
-    print('-------------')
-
-    if not args.fresh_start:
-        run_startup()
+    print("{} successfully started".format(client.user.name))
 
 
 @client.event
 @asyncio.coroutine
 def on_message(message):
     """
-        This message gets called everytime a message is received in Discord
+        This message gets called every time a message is received in Discord
 
         @param message: str, message object that contains information about the msg
     """
-    msgs = run_command(message)
+    msgs = dispatcher.run_command(message)
 
     if msgs:
         for msg in msgs:

@@ -169,10 +169,10 @@ class BaseCommand:
         """
         if self._msg_is_dm():
             run_command_str = '    msg = Message(content=\"{}\")\n    msg.author = User(id=\'{}\')' \
-                              '\n    run_command(msg)\n'.format(command, self.get_msg_author().id)
+                              '\n    dispatcher.run_command(msg)\n'.format(command, self.get_msg_author().id)
         else:
             run_command_str = '    msg = Message(content=\"{}\")\n    msg.server = Server(id=\'{}\')' \
-                              '\n    run_command(msg)\n'.format(command, self.get_msg_server().id)
+                              '\n    dispatcher.run_command(msg)\n'.format(command, self.get_msg_server().id)
 
         file_handle = open('startup.py', 'a')
         file_handle.write(run_command_str)
