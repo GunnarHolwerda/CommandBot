@@ -51,17 +51,8 @@ def is_alias_or_command(command, message):
     @rtype: bool
     """
 
-    if command in COMMANDS.keys():
-        return True
-    elif message.server and command in ALIASES[message.server.id]:
-        return True
-    elif not message.server and \
-            message.channel.is_private and \
-            message.author.id in ALIASES and\
-            command in ALIASES[message.author.id]:
-        return True
-    else:
-        return False
+    return command in COMMANDS.keys() or command_is_dm_alias(command, message.author) or \
+           command_is_server_alias(command, message.server)
 
 
 
@@ -83,9 +74,9 @@ def get_command_object(command, message):
         message.content = message.content.replace(command, "")
 
     if command_is_server_alias(command, message.server):
-        return parse_alias_to_command(message, ALIASES[message.server.id][command])
+        return parse_alias_to_command(message, ALIASES['servers'][message.server.id][command])
     elif command_is_dm_alias(command, message.author):
-        return parse_alias_to_command(message, ALIASES[message.author.id][command])
+        return parse_alias_to_command(message, ALIASES['users'][message.author.id][command])
     else:
         return COMMANDS[command](message)
 
@@ -99,7 +90,7 @@ def command_is_server_alias(command, server):
     @type user: discord.Server
     @return: True if the command is an alias for the server, False otherwise
     """
-    return server and server.id in ALIASES and command in ALIASES[server.id]
+    return server and server.id in ALIASES['servers'] and command in ALIASES['servers'][server.id]
 
 def command_is_dm_alias(command, user):
     """
@@ -110,7 +101,7 @@ def command_is_dm_alias(command, user):
     @type user: discord.User
     @return: True if the command is an alias for the user, False otherwise
     """
-    return user.id in ALIASES and command in ALIASES[user.id]
+    return user.id in ALIASES['users'] and command in ALIASES['users'][user.id]
 
 def parse_alias_to_command(message, alias):
     """

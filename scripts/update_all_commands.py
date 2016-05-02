@@ -94,7 +94,7 @@ def write_new_all_commands(cmd_dict, files):
     for command, value in cmd_dict.items():
         print("Inserting entry for {}".format(command))
         fo.write("    '{0}': {1},\n".format(command, value['class']))
-    fo.write("    'aliases': {}\n")
+    fo.write("    'aliases': {\'servers\': {}, \'users\': {}}\n")
     fo.write("}\n")
     fo.close()
 

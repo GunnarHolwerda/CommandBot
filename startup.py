@@ -18,3 +18,6 @@ def startup():
     msg = Message(content="!alias !cf !cowsay $fortune=True")
     msg.author = User(id='108768204184113152')
     run_command(msg)
+    msg = Message(content="!alias !d !dankmemes")
+    msg.author = User(id='108768204184113152')
+    run_command(msg)

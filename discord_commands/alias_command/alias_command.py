@@ -74,15 +74,17 @@ class AliasCommand(BaseCommand):
         args = self._command_obj._args
         opts = self._command_obj._opts
 
-        aliases = COMMANDS['aliases']
-
-        id = 0
-        if self.get_msg_server() and self.get_msg_server().id not in aliases:
+        if self.get_msg_server():
+            aliases = COMMANDS['aliases']['servers']
             id = self.get_msg_server().id
-        elif self.get_msg_author().id not in aliases:
+            if self.get_msg_server().id not in aliases:
+                aliases[id] = {}
+        else:
+            aliases = COMMANDS['aliases']['users']
             id = self.get_msg_author().id
+            if self.get_msg_author().id not in aliases:
+                aliases[id] = {}
 
-        COMMANDS['aliases'][id] = {}
         aliases[id][self._alias] = {'class': command_class, 'args': args, 'opts': opts}
 
         if 'persist' not in self._opts or self._opts['persist']:
