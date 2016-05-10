@@ -24,6 +24,10 @@ parser.add_argument('-l', '--no-log', dest='no_log', action='store_true', help="
 parser.add_argument('-t', '--token', dest='token', type=str, help="Specify a specific token")
 args = parser.parse_args()
 
+if args.update_commands:
+    os.system('python scripts/update_all_commands.py')
+    exit()
+
 # Setup logging
 if not args.no_log:
     # Set up logging for the Discord API Wrapper
@@ -71,10 +75,6 @@ def on_message(message):
 
 
 if __name__ == "__main__":
-    if args.update_commands:
-        os.system('python scripts/update_all_commands.py')
-        exit()
-
     # Start the bot
     while True:
         client.run(args.token)
