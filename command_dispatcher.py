@@ -2,8 +2,11 @@
     Command Dispatcher
 """
 
+import logging
 from discord_commands.command import BaseCommand
 from discord_commands.all_commands import COMMANDS
+
+logger = logging.getLogger('command-bot')
 
 ALIASES = COMMANDS['aliases']
 
@@ -19,6 +22,7 @@ class CommandDispatcher:
             BaseCommand.freeze_writing = True
             startup(self)
             BaseCommand.freeze_writing = False
+            logger.info("Finished startup")
 
     def run_command(self, message):
         """
@@ -33,7 +37,7 @@ class CommandDispatcher:
         if self.__is_alias_or_command(command, message):
             obj = self.__get_command_object(command, message)
             valid, error = obj.validate()
-            result = obj.run() if valid else error
+            result = obj.run() if valid else logger.error("Validation error: %s:", error)
         elif command == "!code":
             result = BaseCommand(message).code_wrap(message.content)
         else:
@@ -52,8 +56,9 @@ class CommandDispatcher:
         @rtype: bool
         """
 
-        return command in COMMANDS.keys() or self.__command_is_dm_alias(command, message.author) or \
-               self.__command_is_server_alias(command, message.server)
+        return command in COMMANDS.keys() or \
+         self.__command_is_dm_alias(command, message.author) or \
+         self.__command_is_server_alias(command, message.server)
 
 
 
@@ -75,9 +80,11 @@ class CommandDispatcher:
             message.content = message.content.replace(command, "")
 
         if self.__command_is_server_alias(command, message.server):
-            return self.__parse_alias_to_command(message, ALIASES['servers'][message.server.id][command])
+            return self.__parse_alias_to_command(message,
+                                                 ALIASES['servers'][message.server.id][command])
         elif self.__command_is_dm_alias(command, message.author):
-            return self.__parse_alias_to_command(message, ALIASES['users'][message.author.id][command])
+            return self.__parse_alias_to_command(message,
+                                                 ALIASES['users'][message.author.id][command])
         else:
             return COMMANDS[command](message)
 
@@ -91,7 +98,9 @@ class CommandDispatcher:
         @type user: discord.Server
         @return: True if the command is an alias for the server, False otherwise
         """
-        return server and server.id in ALIASES['servers'] and command in ALIASES['servers'][server.id]
+        return server and \
+            server.id in ALIASES['servers'] and \
+            command in ALIASES['servers'][server.id]
 
     def __command_is_dm_alias(self, command, user):
         """

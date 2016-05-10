@@ -5,6 +5,9 @@
 import json
 import requests
 import re
+import logging
+
+logger = logging.getLogger('command-bot')
 
 
 class SportCommand:
@@ -19,6 +22,7 @@ class SportCommand:
 
     def __init__(self, message):
         super(SportCommand, self).__init__(message)
+        #print("Initializing SportCommand")
         self._espn_url = ""
 
     # SportCommand methods
@@ -35,7 +39,10 @@ class SportCommand:
         json_text = re.search(
             r'window\.espn\.scoreboardData\s*=\s*({.*});window', page).group(1)
 
+        logger.info("Received game information: %s", json_text)
+
         json_data = json.loads(json_text)
+
         return json_data
 
     @staticmethod
@@ -115,10 +122,10 @@ class SportCommand:
                     team_one['abbreviation'] = team_one['abbreviation'].lower()
 
             score_str = "{:<4} vs {:<4} ... {:<3}-{:>3} {}".format(team_one['abbreviation'],
-                                                                     team_two['abbreviation'],
-                                                                     team_one['score'],
-                                                                     team_two['score'],
-                                                                     score['status']['description'])
+                                                                   team_two['abbreviation'],
+                                                                   team_one['score'],
+                                                                   team_two['score'],
+                                                                   score['status']['description'])
 
             if 'playoffs' in score:
                 score_str += " {}".format(score['playoffs'])
@@ -132,6 +139,3 @@ class SportCommand:
                 not_started += score_str
 
         return not_started + "\n" + in_progress + "\n" + final_scores
-
-    def run(self):
-        super(SportCommand, self).run()

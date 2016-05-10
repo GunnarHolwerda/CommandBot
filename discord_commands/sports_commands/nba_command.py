@@ -47,7 +47,8 @@ class NBACommand(SportCommand, BaseCommand):
     @staticmethod
     def __add_playoff_data(json_data):
         """
-        This method will get passed to _create_scores_dict so that playoff information can be added to the message
+        This method will get passed to _create_scores_dict so that playoff
+        information can be added to the message
         @param json_data: The json data, from root it will be json_data['events']['competitions']
         @return: True if playoff data exists, false otherwise
         """

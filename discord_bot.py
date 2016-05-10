@@ -9,6 +9,7 @@ import asyncio
 import discord
 import os
 import logging
+import time
 from command_dispatcher import CommandDispatcher
 
 # ArgParse
@@ -22,20 +23,27 @@ parser.add_argument('-s', '--fresh-start', dest='fresh_start',
 parser.add_argument('-l', '--no-log', dest='no_log', action='store_true', help="Disables logging")
 parser.add_argument('-t', '--token', dest='token', type=str, help="Specify a specific token")
 args = parser.parse_args()
-client = discord.Client()
-dispatcher = CommandDispatcher() if not args.fresh_start else CommandDispatcher(fresh_start=True)
-
-if not args.token:
-    print("A token must be supplied")
-    exit()
 
 # Setup logging
 if not args.no_log:
-    logger = logging.getLogger('discord')
-    logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(filename='/tmp/log/discord/discord.log', encoding='utf-8', mode='w')
-    handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+    # Set up logging for the Discord API Wrapper
+    logger = logging.getLogger('command-bot')
+    logger.setLevel(logging.INFO)
+    handler = logging.FileHandler(filename='/var/log/discord/discord.log',
+    encoding='utf-8',
+    mode='w')
+    handler.setFormatter(logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s'))
     logger.addHandler(handler)
+    logger.info("Starting command-bot")
+
+if not args.token:
+    print("A token must be supplied")
+    logger.error("No token supplied exiting")
+    exit()
+
+
+client = discord.Client()
+dispatcher = CommandDispatcher() if not args.fresh_start else CommandDispatcher(fresh_start=True)
 
 
 @client.event
@@ -44,7 +52,7 @@ def on_ready():
     """
         This functions runs when the client is logged in
     """
-    print("{} successfully started".format(client.user.name))
+    logger.info("%s successfully started", client.user.name)
 
 
 @client.event
@@ -68,5 +76,7 @@ if __name__ == "__main__":
         exit()
 
     # Start the bot
-    print("Starting DiscordBot")
-    client.run(args.token)
+    while True:
+        client.run(args.token)
+        # Retry every five seconds to log back in
+        time.sleep(5)

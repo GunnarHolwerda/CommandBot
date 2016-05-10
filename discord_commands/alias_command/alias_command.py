@@ -60,7 +60,8 @@ class AliasCommand(BaseCommand):
         else:
             command_str = self._aliased_command.replace(self._command_to_alias, '')
 
-        self._command_obj = COMMANDS[self._args[1]](Message(content=command_str, server=self._message.server))
+        self._command_obj = COMMANDS[self._args[1]](Message(content=command_str,
+                                                            server=self._message.server))
 
         if not self._command_obj:
             return False, "Format of command was invalid"

@@ -33,10 +33,10 @@ class HelpCommand(BaseCommand):
             ret_str = "Usage: !help <command>\nPrint help information for the command specified"
             ret_str += "\n\nAvailable Commands: \n"
             for command, obj in COMMANDS.items():
+                # This will skip aliases
                 if not isinstance(obj, dict):
                     ret_str += "- " + command + " - " + obj.info() + "\n"
-                else:
-                    ret_str += "- " + command + " - " + obj['class'].info() + "\n"
+
             return self.code_wrap(ret_str)
 
     @staticmethod

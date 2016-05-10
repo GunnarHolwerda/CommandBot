@@ -3,6 +3,9 @@
 """
 from datetime import datetime
 import re
+import logging
+
+logger = logging.getLogger('command-bot')
 
 
 class BaseCommand:
@@ -24,6 +27,8 @@ class BaseCommand:
         self._command_str = self.__strip_options(message.content)
         self._opts = self.__parse_options(message.content)
         self._args = self.__parse_args(message.content)
+        logger.info("Command run: %s", self.__class__)
+
 
     def _msg_is_dm(self):
         """
@@ -47,25 +52,6 @@ class BaseCommand:
         """
         return self._message.author
 
-    def _parse_date_option(self, return_format="%Y%m%d"):
-        """
-            Parses the date option and returns a date represented as a date
-
-            :param: args, dictionary of arguments and options
-
-            :param return_format: str, the date format
-
-            :return: date_string, string date in %Y%m%d format by default
-        """
-        if self._opts and 'date' in self._opts:
-            date_obj = datetime.strptime(self._opts['date'], "%m/%d/%Y")
-            date_string = date_obj.strftime(return_format)
-        else:
-            date_obj = datetime.now()
-            date_string = date_obj.strftime(return_format)
-
-        return date_string
-
     def __parse_args(self, command_str):
         """
             Strips all arguments from a command string and returns them as a dict
@@ -88,6 +74,8 @@ class BaseCommand:
 
         if command_str:
             args = command_str.split(' ')
+
+        logger.info("Arguments parsed: %s", ",".join(args))
 
         return args
 
@@ -116,6 +104,9 @@ class BaseCommand:
                     value = bool(value)
 
                 options[opt] = value
+
+        import pprint
+        logger.info("Options parsed: %s", pprint.pformat(options))
 
         return options
 
@@ -168,15 +159,42 @@ class BaseCommand:
             :param command: command
         """
         if self._msg_is_dm():
-            run_command_str = '    msg = Message(content=\"{}\")\n    msg.author = User(id=\'{}\')' \
-                              '\n    dispatcher.run_command(msg)\n'.format(command, self.get_msg_author().id)
+            run_command_str = '    msg = Message(content=\"{}\")\n'\
+                              '    msg.author = User(id=\'{}\')\n' \
+                              '    dispatcher.run_command(msg)\n'.format(command,
+                                                                         self.get_msg_author().id)
+            logger.info("Adding command '%s' to startup.py for User %s",
+                        command, self.get_msg_author().id)
         else:
-            run_command_str = '    msg = Message(content=\"{}\")\n    msg.server = Server(id=\'{}\')' \
-                              '\n    dispatcher.run_command(msg)\n'.format(command, self.get_msg_server().id)
+            run_command_str = '    msg = Message(content=\"{}\")\n'\
+                              '    msg.server = Server(id=\'{}\')\n' \
+                              '    dispatcher.run_command(msg)\n'.format(command,
+                                                                         self.get_msg_server().id)
+            logger.info("Adding command '%s' to startup.py for Server %s",
+                        command, self.get_msg_server().id)
 
         file_handle = open('startup.py', 'a')
         file_handle.write(run_command_str)
         file_handle.close()
+
+    def _parse_date_option(self, return_format="%Y%m%d"):
+        """
+            Parses the date option and returns a date represented as a date
+
+            :param: args, dictionary of arguments and options
+
+            :param return_format: str, the date format
+
+            :return: date_string, string date in %Y%m%d format by default
+        """
+        if self._opts and 'date' in self._opts:
+            date_obj = datetime.strptime(self._opts['date'], "%m/%d/%Y")
+            date_string = date_obj.strftime(return_format)
+        else:
+            date_obj = datetime.now()
+            date_string = date_obj.strftime(return_format)
+
+        return date_string
 
     # Abstract Methods
     def run(self):
