@@ -1,7 +1,7 @@
 # Discord CommandBot
 This is a Discord bot that can be [added to your server](https://discordapp.com/oauth2/authorize?&client_id=175838908830056450&scope=bot&permissions=4000).
 
-This bot provides many different commands to enhance your Discord Guild.
+This bot provides many different commands to enhance your Discord Server.
 
 ## Supported Commands
 Arguments are required text for the Commands
@@ -123,33 +123,24 @@ Make sure you are using Python 3.4 when installing packages and running commands
 
 `$ pip3 install /path/to/requirements.txt`
 
-#### Edit user.py
-
-Edit `user.py` to include your username and password for your Discord Account. Feel free to create a new account and put their credentials in the file, just make sure they have accepted an invite to your server.
-
 #### Run the client
 To run the client:
-`$ python3 custom_discord.py`
+`$ python3 discord_bot.py`
 
-Or you can make custom_discord.py executable and run it that way too.
+Or you can make discord_bot.py executable and run it that way too.
 
 If you want the command to run in the background and be able to close the terminal window you run it in:
 
-`$ chmod +x /path/to/custom_discord.py`
+`$ chmod +x /path/to/discord_bot.py`
 
-`$ nohup ./custom_discord.py &`
+`$ ./discord_bot.py -t <your_bot_token>`
 
-In order to kill the command after running it with nohup, use `$ ps -ef | grep python3` to find the process id of the program and then kill it using `kill -9 <pid>`.
+You will need to create a bot token if you are going to run this bot on your own. They can be created through Discord's Official API page
 
-NOTE: All commands here are given to be run on a linux system.
+NOTE: All commands here are given to be run on a Linux system.
 
 # Notes
 I work on this in my free time and would love to hear suggestions you have for other commands you would like.
-
-## My short list of things todo include:
-*   Create NCAACommand to have a NCAAMCommand extend from so that I can include the conference information in other college athletic commands that I may add
-*   Delete the command message that has been sent
-
 
 # Development
 If you would like to help develop for this project feel free!
@@ -162,6 +153,6 @@ If you would like to help develop for this project feel free!
 4. Implement the `run`, `help`, and `validate` functions from BaseCommand (You can skip validate if no validation needs to be done)  
 5. In your `__init__.py` include a line:  
 `from .<your_command>_command import <CommmandClassName>`
-6. Run `$ ./discord_bot.py -u` to include your command in the known commands list
+6. Run `$ ./discord_bot.py -u` to include your command in the known commands list, all_commands.py
 
 If you want your command to persist across restarts of the Bot, you will call `self._write_to_startup()`, this will write out the function as it was called to `startup.py` which is ran every time the bot is run
