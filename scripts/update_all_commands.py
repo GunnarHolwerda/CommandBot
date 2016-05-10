@@ -7,7 +7,6 @@
 import os
 import re
 
-
 cmd_file_pattern = re.compile(r'\w*_command\.py')
 
 

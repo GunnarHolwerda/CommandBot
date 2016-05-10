@@ -12,3 +12,6 @@ __pycache__
 
 # Ignore todo file
 todo.txt
+
+# Ignore all_commands.py because it is generated
+all_commands.py

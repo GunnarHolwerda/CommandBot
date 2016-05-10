@@ -5,10 +5,9 @@
 import logging
 from discord_commands.command import BaseCommand
 from discord_commands.all_commands import COMMANDS
+ALIASES = COMMANDS['aliases']
 
 logger = logging.getLogger('command-bot')
-
-ALIASES = COMMANDS['aliases']
 
 class CommandDispatcher:
     """

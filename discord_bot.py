@@ -10,7 +10,6 @@ import discord
 import os
 import logging
 import time
-from command_dispatcher import CommandDispatcher
 
 # ArgParse
 parser = argparse.ArgumentParser(description="Discord Bot")
@@ -24,9 +23,11 @@ parser.add_argument('-l', '--no-log', dest='no_log', action='store_true', help="
 parser.add_argument('-t', '--token', dest='token', type=str, help="Specify a specific token")
 args = parser.parse_args()
 
-if args.update_commands:
+if args.update_commands or not os.path.isfile('discord_commands/all_commands.py'):
     os.system('python scripts/update_all_commands.py')
-    exit()
+
+# Import CommandDispatcher after all_commands.py has been generated
+from command_dispatcher import CommandDispatcher
 
 # Setup logging
 if not args.no_log:
