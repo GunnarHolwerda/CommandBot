@@ -1,9 +1,56 @@
-# Discord CommandBot
-This is a Discord bot that can be [added to your server](https://discordapp.com/oauth2/authorize?&client_id=175838908830056450&scope=bot&permissions=4000).
+# Discord Bot Framework
+This is a python framework that can be used to create Discord bots and their commands
 
-This bot provides many different commands to enhance your Discord Server.
+# Setup
+Make sure you are using Python 3.4 when installing packages and running commands.
 
-## Supported Commands
+#### Install all required packages using pip from `requirements.txt`
+
+`$ pip3 install /path/to/requirements.txt`
+
+#### Run the client
+To run the client:
+`$ python3 discord_bot.py`
+
+If you want the command to run in the background and be able to close the terminal window you run it in:
+
+`$ chmod +x /path/to/discord_bot.py`
+
+`$ ./discord_bot.py -t <your_bot_token>`
+
+You will need to create a bot token if you are going to run this bot on your own. They can be created through [Discord's Official API page](https://discordapp.com/developers/applications/me/create)
+
+# Initial Setup
+1. Download and extract or clone the project
+2. run `python3 discord_bot.py -t <token>` and input your token
+3. The bot is now running with all of the built in commands!
+
+# Documentation
+If you would like to help develop for this project feel free!
+
+#### How to add a command
+1. Create a folder in the discord_commands folder
+2. In the folder place an `__init__.py` and
+`<your_command>_command.py`.  
+3. Create a class in `<your_command>_command.py` that extends BaseCommand  
+4. Implement the `run`, `help`, and `validate` functions from BaseCommand (You can skip validate if no validation needs to be done)  
+5. In your `__init__.py` include a line:  
+`from .<your_command>_command import <CommmandClassName>`
+6. Run `python3 discord_bot.py -u` to run the script that builds the list of commands the server will run
+
+#### Run a command at startup
+If you want your command to persist across restarts of the Bot, you will call `self._write_to_startup()`, this will write out the function as it was called to `startup.py`.
+
+#### Sports Commands
+The sports commands use scraping and regex to parse the scoreboard page of ESPN to build the scores data. If you extend the SportCommand class, you will need to set the `_espn_url` property to the url to the scoreboard of your sport.
+
+#### The Alias Command
+The alias command allows you to create commands out of commands and their options. When this is called it will create a new command, that will call an existing command with options or anything.
+
+# Notes
+I worked on this project in my free time, and have since not been able to work much on it. Feel free to fork, ask for features, and create pull requests of your own!
+
+## Built In Commands
 Arguments are required text for the Commands
 Options are optional and passed in via the format:
 `$option=value`
@@ -111,48 +158,3 @@ T
 
 ##### Description
 *   Creates an alias for an existing command
-
-
-
-
-
-# Setup
-Make sure you are using Python 3.4 when installing packages and running commands.
-
-#### Install all required packages using pip from `requirements.txt`
-
-`$ pip3 install /path/to/requirements.txt`
-
-#### Run the client
-To run the client:
-`$ python3 discord_bot.py`
-
-Or you can make discord_bot.py executable and run it that way too.
-
-If you want the command to run in the background and be able to close the terminal window you run it in:
-
-`$ chmod +x /path/to/discord_bot.py`
-
-`$ ./discord_bot.py -t <your_bot_token>`
-
-You will need to create a bot token if you are going to run this bot on your own. They can be created through Discord's Official API page
-
-NOTE: All commands here are given to be run on a Linux system.
-
-# Notes
-I work on this in my free time and would love to hear suggestions you have for other commands you would like.
-
-# Development
-If you would like to help develop for this project feel free!
-
-#### How to add a command
-1. Create a folder in discord_commands.
-2. In the folder place an `__init__.py` and
-`<your_command>_command.py`.  
-3. Create a class in `<your_command>_command.py` that extends BaseCommand  
-4. Implement the `run`, `help`, and `validate` functions from BaseCommand (You can skip validate if no validation needs to be done)  
-5. In your `__init__.py` include a line:  
-`from .<your_command>_command import <CommmandClassName>`
-6. Run `$ ./discord_bot.py -u` to include your command in the known commands list, all_commands.py
-
-If you want your command to persist across restarts of the Bot, you will call `self._write_to_startup()`, this will write out the function as it was called to `startup.py` which is ran every time the bot is run

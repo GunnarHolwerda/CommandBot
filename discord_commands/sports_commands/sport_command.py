@@ -22,7 +22,6 @@ class SportCommand:
 
     def __init__(self, message):
         super(SportCommand, self).__init__(message)
-        #print("Initializing SportCommand")
         self._espn_url = ""
 
     # SportCommand methods
