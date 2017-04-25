@@ -14,15 +14,3 @@ def startup(dispatcher):
     @param dispatcher: command_dispatcher.CommandDispatcher
     """
     logger.info("Initializing saved commands")
-    msg = Message(content="!alias !d !dankmemes")
-    msg.server = Server(id='108769127627280384')
-    dispatcher.run_command(msg)
-    msg = Message(content="!alias !cf !cowsay $fortune=True")
-    msg.server = Server(id='108769127627280384')
-    dispatcher.run_command(msg)
-    msg = Message(content="!alias !cf !cowsay $fortune=True")
-    msg.author = User(id='108768204184113152')
-    dispatcher.run_command(msg)
-    msg = Message(content="!alias !d !dankmemes")
-    msg.author = User(id='108768204184113152')
-    dispatcher.run_command(msg)
